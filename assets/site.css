@@ -1,3 +1,60 @@
+/* fonts: self-hosted latin subsets (Inter, Barlow Condensed, Yellowtail) */
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/barlow-condensed-600.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/barlow-condensed-700.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/inter.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(fonts/inter.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/inter.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/inter.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Yellowtail';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/yellowtail-400.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 /* Cloudside Vapor — shared styles. Dark shop floor, warm paper for the "about us" moments, one red. */
 :root{
   --bg:#0d0c0c; --panel:#161414; --panel2:#1d1a1a; --line:#2b2727; --ink:#f3eee8; --mute:#a69e97; --dim:#8c847e;
@@ -227,10 +284,10 @@ footer.ftr{border-top:1px solid var(--line);margin-top:40px;padding-block:56px 2
 h1 .script,h2 .script{display:inline-block;font-size:.82em;transform:rotate(-4deg);margin:0 .06em;text-shadow:0 0 30px rgba(227,16,31,.45)}
 .smoke{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
 .smoke i{position:absolute;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.09),rgba(255,255,255,0));will-change:transform;animation:drift 26s ease-in-out infinite}
-.smoke i:nth-child(1){width:70vmax;height:50vmax;left:-25vmax;top:10%}
-.smoke i:nth-child(2){width:60vmax;height:45vmax;right:-20vmax;top:-15%;background:radial-gradient(closest-side,rgba(227,16,31,.22),rgba(227,16,31,0));animation-duration:32s;animation-delay:-8s}
-.smoke i:nth-child(3){width:50vmax;height:40vmax;left:25%;bottom:-25vmax;animation-duration:38s;animation-delay:-16s}
-.smoke i:nth-child(4){width:35vmax;height:30vmax;right:10%;bottom:5%;background:radial-gradient(closest-side,rgba(255,80,90,.12),rgba(255,80,90,0));animation-duration:22s;animation-delay:-4s}
+.smoke i:nth-child(1){width:70vmax;height:50vmax;left:-25vmax;top:6vmax}
+.smoke i:nth-child(2){width:60vmax;height:45vmax;left:55vw;top:-10vmax;background:radial-gradient(closest-side,rgba(227,16,31,.22),rgba(227,16,31,0));animation-duration:32s;animation-delay:-8s}
+.smoke i:nth-child(3){width:50vmax;height:40vmax;left:25vw;top:30vmax;animation-duration:38s;animation-delay:-16s}
+.smoke i:nth-child(4){width:35vmax;height:30vmax;left:60vw;top:28vmax;background:radial-gradient(closest-side,rgba(255,80,90,.12),rgba(255,80,90,0));animation-duration:22s;animation-delay:-4s}
 @keyframes drift{0%,100%{transform:translate3d(0,0,0) scale(1)}33%{transform:translate3d(6vmax,-4vmax,0) scale(1.12)}66%{transform:translate3d(-5vmax,3vmax,0) scale(.94)}}
 .marquee{overflow:hidden;background:var(--red);color:#fff;transform:rotate(-1.4deg);margin-inline:-20px;padding-block:13px;position:relative;z-index:3;box-shadow:0 18px 40px -12px rgba(227,16,31,.55)}
 .marquee.alt{background:var(--paper);color:var(--paper-ink);transform:rotate(1deg);margin-top:-40px;z-index:2;box-shadow:none}

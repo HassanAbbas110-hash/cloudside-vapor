@@ -8,8 +8,9 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0d0c0c">
 <link rel="icon" href="assets/img/icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&family=Yellowtail&display=swap" media="print" onload="this.media='all'">
+<link rel="preload" href="assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/yellowtail-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" as="image" href="assets/img/shopfront.webp">
 <link rel="stylesheet" href="assets/site.css">
 <style>
@@ -31,7 +32,7 @@
 .chipf svg{width:20px;height:20px;color:var(--red-hi)}
 .chipf.a{left:-28px;top:16%}
 .chipf.b{right:-18px;bottom:12%;animation-delay:-3s}
-.sticker{position:absolute;right:-26px;top:-30px;width:132px;transform:rotate(10deg);filter:drop-shadow(0 14px 22px rgba(0,0,0,.6));animation:bob 7s ease-in-out infinite;animation-delay:-1.5s}
+.sticker{position:absolute;right:-26px;top:-30px;width:132px;height:auto;transform:rotate(10deg);filter:drop-shadow(0 14px 22px rgba(0,0,0,.6));animation:bob 7s ease-in-out infinite;animation-delay:-1.5s}
 @keyframes bob{0%,100%{translate:0 0}50%{translate:0 -10px}}
 
 .cats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
@@ -132,7 +133,7 @@
     </div>
     <div class="frame">
       <div class="ph"><img src="assets/img/shopfront.webp" alt="The Cloudside Vapor shopfront at Atlas Junction, with hookahs and vape shelves inside" width="600" height="583" fetchpriority="high"></div>
-      <img class="sticker" src="assets/img/logo-sm.webp" alt="" width="180" height="121">
+      <img class="sticker" src="assets/img/logo.webp" alt="" width="420" height="281">
       <div class="chipf a"><span data-i="bag"></span><div><b data-count-all>2 277</b><br>in stock today</div></div>
       <div class="chipf b"><span data-i="truck"></span><div><b>SA-wide</b><br>courier &amp; 7Waves</div></div>
     </div>
