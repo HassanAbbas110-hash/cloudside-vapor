@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#0d0c0c">
 <link rel="icon" href="assets/img/icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&family=Yellowtail&display=swap" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="assets/site.css">
 <style>
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;counter-reset:st}
@@ -17,7 +17,10 @@
 .step::before{content:counter(st);display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:22px;margin-bottom:14px}
 .step h3{font-size:23px;text-transform:uppercase;margin-bottom:6px}
 .step p{color:var(--mute);font-size:14.5px}
-.ways{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ways{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.way.wv{background:linear-gradient(150deg,#0c2a4a,#0b1726);border-color:#1d4a7a}
+.way.wv h3,.way.wv p,.way.wv ul{color:#d6ecfb}
+.way.wv svg{color:#7dd3fc}
 .way{padding:26px;border-radius:var(--r);border:1px solid var(--paper-line);background:#fff}
 .way h3{font-size:26px;text-transform:uppercase;margin:10px 0 8px;color:var(--paper-ink)}
 .way p{color:var(--paper-mute);font-size:15px}
@@ -40,7 +43,7 @@
 <main id="main">
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><span>Delivery &amp; help</span></nav>
-    <header class="phead"><span class="tag">Ordering made simple</span><h1 style="margin-top:12px">Delivery &amp; help</h1>
+    <header class="phead"><span class="tag">Ordering made simple</span><h1 style="margin-top:12px">Delivery &amp; <span class="script">help</span></h1>
       <p>How ordering works, what delivery and collection look like, and answers to the questions we get asked most.</p></header>
   </div>
 
@@ -58,12 +61,14 @@
 
   <section class="sec paper">
     <div class="wrap">
-      <div class="sec-head"><div><span class="tag">Getting it to you</span><h2>Collect or deliver</h2></div></div>
+      <div class="sec-head"><div><span class="tag">Getting it to you</span><h2>Three ways to get <span class="script">it</span></h2></div></div>
       <div class="ways">
         <div class="way"><span data-i="pin"></span><h3>Collect in Boksburg</h3><p>Pick up from the shop at 0A Edel Road, Atlas Junction, once we've told you it's ready.</p>
           <ul><li>No delivery fee</li><li>Bring your ID</li><li>Open 7 days a week</li></ul></div>
-        <div class="way"><span data-i="truck"></span><h3>Delivery across SA</h3><p>We deliver anywhere in South Africa. The cost depends on where you are, and we'll tell you before you pay.</p>
+        <div class="way"><span data-i="truck"></span><h3>Courier across SA</h3><p>We deliver anywhere in South Africa. The cost depends on where you are, and we'll tell you before you pay.</p>
           <ul><li>Delivery cost confirmed up front</li><li>ID checked on delivery (18+)</li><li>Updates on WhatsApp until it arrives</li></ul></div>
+        <div class="way wv"><span data-i="out"></span><h3>Fast with 7Waves</h3><p>Our delivery partner 7Waves brings your order to your door, at the same prices as the shop.</p>
+          <ul><li>Choose "7Waves" in your bag</li><li>Copy your list in one tap</li><li><a class="link" id="wave-help" target="_blank" rel="noopener">Open 7Waves</a> and order</li></ul></div>
       </div>
     </div>
   </section>
@@ -73,6 +78,7 @@
       <div><span class="tag">FAQs</span><h2 style="margin-top:10px">Good questions</h2><p class="muted" style="margin-top:12px">Can't find your answer? <a class="link" id="faq-wa" target="_blank" rel="noopener">Message us on WhatsApp</a> or call <a class="link" href="tel:+27849437805">+27 84 943 7805</a>.</p></div>
       <div class="qa">
         <details open><summary>Do you deliver outside Gauteng?</summary><p>Yes, anywhere in South Africa. Send your order on WhatsApp with your address and we'll confirm the delivery cost before you pay.</p></details>
+        <details><summary>What is 7Waves?</summary><p>7Waves is our delivery partner for fast local orders. Pick "7Waves" in your bag, copy your list and order the same items on 7Waves. Prices are the same as in the shop.</p></details>
         <details><summary>How long does delivery take?</summary><p>It depends on where you are. We'll give you an estimate when we confirm your order and send tracking once it's on its way.</p></details>
         <details><summary>Can I order online and collect in the shop?</summary><p>Yes. Choose "Collect in Boksburg" in your bag. We'll let you know on WhatsApp when it's packed and waiting for you at Atlas Junction.</p></details>
         <details><summary>How do I pay?</summary><p>Use the <b>Buy now</b> button on a product to pay through our online checkout, or order on WhatsApp and we'll send you payment details once your order is confirmed. You can also pay in the shop when you collect.</p></details>
@@ -89,6 +95,7 @@
 <script>
 $$("[data-i]").forEach((el) => (el.outerHTML = I[el.dataset.i]));
 $("#faq-wa").href = wa("Hi Cloudside, I have a question: ");
+$("#wave-help").href = waveLink();
 </script>
 </body>
 </html>

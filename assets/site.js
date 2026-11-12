@@ -8,8 +8,9 @@ const CONFIG = {
   mapsQuery: "Cloudside Vapor, 0A Edel Road, Atlas Junction, Boksburg 1523",
   hoursNote: "Open 7 days a week", // TODO: confirm exact trading hours with the shop
   onlineStore: "https://cloudsidevapor.co.za",
-  instagram: "", // TODO: add the shop's Instagram link
-  facebook: ""   // TODO: add the shop's Facebook link
+  instagram: "",  // TODO: paste the shop's Instagram profile link
+  facebook: "",   // TODO: paste the shop's Facebook page link
+  sevenWaves: ""  // TODO: paste Cloudside's store link on 7Waves
 };
 const DETAIL_SHARDS = 40; // must match SHARDS in tools/snapshot.py
 
@@ -18,6 +19,11 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const R = (n) => "R" + Math.round(n).toLocaleString("en-ZA").replace(/ /g, " ");
 const wa = (text) => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
+const findLink = (what) => "https://www.google.com/search?q=" + encodeURIComponent(what);
+const igLink = () => CONFIG.instagram || findLink("Cloudside Vapor Boksburg Instagram");
+const fbLink = () => CONFIG.facebook || findLink("Cloudside Vapor Boksburg Facebook");
+const waveLink = () => CONFIG.sevenWaves || findLink("7Waves delivery Cloudside Vapor");
+const reviewLink = findLink("Cloudside Vapor Atlas Junction Boksburg reviews");
 const mapsLink = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(CONFIG.mapsQuery);
 const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
@@ -136,6 +142,8 @@ function renderDrawer() {
   $("#d-total").textContent = R(total);
   $$("#d-mode button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.m === fulfil));
   $("#d-addr-wrap").hidden = fulfil !== "deliver";
+  $(".df", d).classList.toggle("waves", fulfil === "waves");
+  $("#d-wave").hidden = fulfil !== "waves";
 }
 function sendOrder() {
   const name = $("#d-name"), addr = $("#d-addr");
@@ -143,7 +151,7 @@ function sendOrder() {
   if (fulfil === "deliver" && !addr.value.trim()) { addr.classList.add("bad"); addr.focus(); toast("Add a delivery address (suburb and city is fine)"); return; }
   const total = cart.reduce((s, l) => s + l.p * l.q, 0);
   const lines = cart.map((l) => `• ${l.q} x ${l.n} (${R(l.p * l.q)})`).join("\n");
-  const msg = `Hi Cloudside, I'd like to order:\n\n${lines}\n\nTotal: ${R(total)}\n${fulfil === "deliver" ? `Delivery to: ${addr.value.trim()}` : "I'll collect at Atlas Junction"}\nName: ${name.value.trim()}${$("#d-note").value.trim() ? "\nNote: " + $("#d-note").value.trim() : ""}`;
+  const msg = `Hi Cloudside, I'd like to order:\n\n${lines}\n\nTotal: ${R(total)}\n${fulfil === "deliver" ? `Courier to: ${addr.value.trim()}` : "I'll collect at Atlas Junction"}\nName: ${name.value.trim()}${$("#d-note").value.trim() ? "\nNote: " + $("#d-note").value.trim() : ""}`;
   store.set("cv_name", name.value.trim());
   window.open(wa(msg), "_blank", "noopener");
 }
@@ -165,7 +173,7 @@ function chromeTop() {
   const navLinks = nav.map(([h, t, k]) => `<a href="${h}"${k && k === page ? ' aria-current="page"' : ""}>${t}</a>`).join("");
   document.body.insertAdjacentHTML("afterbegin", `
   <a class="sr" href="#main">Skip to content</a>
-  <div class="strip"><div class="wrap"><span>Nationwide delivery across South Africa</span><span>Shop at Atlas Junction, Boksburg · ${CONFIG.hoursNote}</span><span>Strictly 18+</span></div></div>
+  <div class="strip"><div class="wrap"><span>Courier anywhere in SA &middot; Fast local delivery with 7Waves</span><span>Shop at Atlas Junction, Boksburg · ${CONFIG.hoursNote}</span><span>Strictly 18+</span></div></div>
   <header class="hdr"><div class="wrap hdr-in">
     <a class="logo" href="index.html" aria-label="Cloudside Vapor home"><img src="assets/img/logo-sm.webp" alt="Cloudside Vapor" width="180" height="121"></a>
     <nav class="nav" aria-label="Main">${navLinks}</nav>
@@ -201,18 +209,21 @@ function chromeBottom() {
     <div class="dh"><h3>Your bag</h3><button class="x" data-close aria-label="Close">${I.x}</button></div>
     <div class="db"></div>
     <div class="df">
-      <div class="seg" id="d-mode" role="group" aria-label="How do you want it?"><button data-m="collect">Collect in Boksburg</button><button data-m="deliver">Deliver to me</button></div>
-      <div class="field"><label for="d-name">Your name</label><input id="d-name" autocomplete="name" placeholder="Name and surname"></div>
+      <div class="seg three" id="d-mode" role="group" aria-label="How do you want it?"><button data-m="collect">Collect</button><button data-m="deliver">Courier (SA)</button><button data-m="waves">7Waves</button></div>
+      <div class="wavebox" id="d-wave" hidden><b>Want it fast? Order through 7Waves</b><span>7Waves is our delivery partner. Same prices as the shop, brought to your door. Copy your bag, open 7Waves and order the same items there.</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-sm btn-line" id="d-copy">Copy my list</button><a class="btn btn-sm btn-wave" id="d-wave-go" target="_blank" rel="noopener">Open 7Waves ${I.out}</a></div></div>
+      <div class="field pickup"><label for="d-name">Your name</label><input id="d-name" autocomplete="name" placeholder="Name and surname"></div>
       <div class="field" id="d-addr-wrap" hidden><label for="d-addr">Delivery address</label><input id="d-addr" autocomplete="street-address" placeholder="Street, suburb, city"></div>
-      <div class="field"><label for="d-note">Anything else? (optional)</label><textarea id="d-note" rows="2" placeholder="Flavour swaps, best time to collect…"></textarea></div>
+      <div class="field pickup"><label for="d-note">Anything else? (optional)</label><textarea id="d-note" rows="2" placeholder="Flavour swaps, best time to collect…"></textarea></div>
       <div class="tot"><span class="muted">Total</span><strong id="d-total">R0</strong></div>
-      <button class="btn btn-wa" id="d-send">${I.wa} Send order on WhatsApp</button>
-      <p class="fine">We check stock and confirm delivery costs and payment with you on WhatsApp before anything is charged. ID required on collection and delivery.</p>
+      <button class="btn btn-wa pickup" id="d-send">${I.wa} Send order on WhatsApp</button>
+      <p class="fine pickup">We check stock and confirm delivery costs and payment with you on WhatsApp before anything is charged. ID required on collection and delivery.</p>
     </div></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <div class="gate" id="gate" hidden role="dialog" aria-modal="true" aria-labelledby="gate-h"><div class="gate-in" id="gate-in"></div></div>`);
 
   $("#d-name").value = store.get("cv_name", "");
+  $("#d-wave-go").href = waveLink();
   renderCounts();
 }
 
@@ -238,7 +249,7 @@ function gate() {
 
 /* ---------- global events ---------- */
 document.addEventListener("click", async (e) => {
-  const t = e.target.closest("[data-add],[data-fav],[data-unfav],[data-inc],[data-dec],[data-rm],[data-close],#bag-btn,#fav-btn,#burger,#mnav-x,#d-send,#d-mode button,#scrim");
+  const t = e.target.closest("[data-add],[data-fav],[data-unfav],[data-inc],[data-dec],[data-rm],[data-close],#bag-btn,#fav-btn,#burger,#mnav-x,#d-send,#d-copy,#d-mode button,#scrim,.stars button");
   if (!t) return;
   if (t.dataset.add) {
     e.preventDefault();
@@ -257,11 +268,50 @@ document.addEventListener("click", async (e) => {
   else if (t.id === "burger") $("#mnav").classList.add("on");
   else if (t.id === "mnav-x") $("#mnav").classList.remove("on");
   else if (t.id === "d-send") sendOrder();
+  else if (t.id === "d-copy") {
+    const txt = cart.map((l) => `${l.q} x ${l.n}`).join("\n");
+    try { await navigator.clipboard.writeText(txt); toast("Your list is copied. Paste it into 7Waves."); } catch { toast("Couldn't copy. Long-press the items to copy them instead."); }
+  }
+  else if (t.dataset.s) rate(t);
   else if (t.dataset.m) { fulfil = t.dataset.m; store.set("cv_fulfil", fulfil); renderDrawer(); }
   else if (t.id === "scrim" || t.hasAttribute("data-close")) closeDrawer();
 });
 document.addEventListener("input", (e) => e.target.classList?.remove("bad"));
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeDrawer(); $("#mnav")?.classList.remove("on"); } });
+
+/* ---------- review card, socials, marquee (shared blocks) ---------- */
+function communityHtml() {
+  return `<div class="comm">
+    <div class="rev rv"><span class="tag">Been in to see us?</span>
+      <h3>Tell Boksburg <span class="script">how it went</span></h3>
+      <div class="stars" role="radiogroup" aria-label="Rate your visit">${[1, 2, 3, 4, 5].map((n) => `<button data-s="${n}" role="radio" aria-checked="false" aria-label="${n} star${n > 1 ? "s" : ""}">★</button>`).join("")}</div>
+      <p class="rev-msg">Tap a star. Happy visits go to Google, where a quick review helps the next person find us. Anything less comes straight to us, so we can fix it.</p>
+      <a class="btn rev-go" href="${reviewLink}" target="_blank" rel="noopener">Write a Google review ${I.out}</a>
+      <div class="q" aria-hidden="true">"</div></div>
+    <div class="socials">
+      <a class="soc ig rv" href="${igLink()}" target="_blank" rel="noopener"><svg class="logo-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+        <div><h4>Instagram</h4><span>New drops, restocks, clouds</span></div><div class="go">${I.out}</div></a>
+      <a class="soc fb rv" href="${fbLink()}" target="_blank" rel="noopener"><svg class="logo-i" viewBox="0 0 24 24" fill="currentColor"><path d="M14 8V6.5c0-.8.5-1 1-1h2V2h-3c-3 0-4 2-4 4.2V8H8v3.5h2V22h4V11.5h2.8l.4-3.5H14Z"/></svg>
+        <div><h4>Facebook</h4><span>Specials and shop news</span></div><div class="go">${I.out}</div></a>
+    </div></div>
+  <div class="club rv"><div><h3>The Cloud <span class="script">Club</span></h3><p>First word on new flavours, restocks and weekend specials, straight to your WhatsApp. Leave any time.</p></div>
+    <a class="btn btn-red" href="${wa("Hi Cloudside! Please add me to the Cloud Club for new drops and specials.")}" target="_blank" rel="noopener">${I.wa} Join on WhatsApp</a></div>`;
+}
+function rate(b) {
+  const box = b.closest(".rev"), n = +b.dataset.s, go = $(".rev-go", box);
+  $$(".stars button", box).forEach((x) => { x.classList.toggle("on", +x.dataset.s <= n); x.setAttribute("aria-checked", x === b); });
+  if (n >= 4) {
+    $(".rev-msg", box).textContent = "Thank you! It would mean a lot if you said that on Google too.";
+    go.href = reviewLink; go.innerHTML = `Write a Google review ${I.out}`;
+  } else {
+    $(".rev-msg", box).textContent = "Sorry it wasn't great. Tell us what happened and we'll make it right.";
+    go.href = wa(`Hi Cloudside, I rated my visit ${n}/5. Here's what happened: `); go.innerHTML = `${I.wa} Tell us privately`;
+  }
+}
+function mountShared() {
+  $$("[data-community]").forEach((el) => (el.innerHTML = communityHtml()));
+  $$("[data-marquee]").forEach((el) => { const h = el.dataset.marquee.split("|").map((w) => `<span>${esc(w)}</span>`).join(""); el.innerHTML = `<div class="mq">${h.repeat(4)}</div>`; });
+}
 
 /* reveal on scroll: content stays visible if this never runs */
 function reveal() {
@@ -272,4 +322,4 @@ function reveal() {
 }
 
 chromeTop();
-document.addEventListener("DOMContentLoaded", () => { chromeBottom(); gate(); reveal(); });
+document.addEventListener("DOMContentLoaded", () => { chromeBottom(); mountShared(); gate(); reveal(); });

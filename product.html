@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0d0c0c">
 <link rel="icon" href="assets/img/icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&family=Yellowtail&display=swap" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="assets/site.css">
 <style>
 .pd{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding-block:24px 64px;align-items:start}
@@ -94,7 +94,8 @@ Promise.all([loadProducts(), loadDetail(id)]).then(([all, det]) => {
       </div>
       <div class="box">
         <div>${I.pin}<span><b>Collect in Boksburg.</b> Order it here and pick it up at Atlas Junction once we've confirmed on WhatsApp.</span></div>
-        <div>${I.truck}<span><b>Delivery anywhere in South Africa.</b> We'll confirm the cost and the delivery time before you pay.</span></div>
+        <div>${I.truck}<span><b>Courier anywhere in South Africa.</b> We'll confirm the cost and the delivery time before you pay.</span></div>
+        <div>${I.out}<span><b>Need it fast?</b> Order it through our delivery partner <a class="link" href="${waveLink()}" target="_blank" rel="noopener">7Waves</a>, at shop prices.</span></div>
         <div>${I.clock}<span><b>18+ only.</b> We check ID on collection and on delivery.</span></div>
       </div>
       ${det.d ? `<div class="desc"><h2>About this product</h2><p>${esc(det.d)}</p></div>` : ""}

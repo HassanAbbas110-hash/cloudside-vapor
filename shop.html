@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#0d0c0c">
 <link rel="icon" href="assets/img/icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&family=Yellowtail&display=swap" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="assets/site.css">
 <style>
 .layout{display:grid;grid-template-columns:260px 1fr;gap:32px;padding-block:28px 40px;align-items:start}
@@ -105,12 +105,14 @@
       <div class="active" id="active"></div>
       <div class="grid" id="grid"></div>
       <div class="loadmore" id="more"></div>
+      <p class="muted" style="text-align:center;margin-top:26px;font-size:14px">Collect in Boksburg, courier anywhere in SA, or <a class="link" id="wave-shop" target="_blank" rel="noopener">get it fast with 7Waves</a>.</p>
     </section>
   </div>
 </main>
 <script>
 $("#grid").innerHTML = "<div class='skel'></div>".repeat(8);
 $("#sq-ic").outerHTML = I.search;
+$("#wave-shop").href = waveLink();
 $("#side-x").innerHTML = I.x;
 
 const PAGE = 36;
