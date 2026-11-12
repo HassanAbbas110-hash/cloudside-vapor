@@ -3,6 +3,7 @@ Run: python tools/snapshot.py   (or pass a folder of saved page JSONs to skip do
 import json, re, html, sys, glob, urllib.request, pathlib
 
 API = "https://cloudsidevapor.co.za/wp-json/wc/store/v1/products?per_page=100&stock_status=instock&page={}"
+MAX_TERMS = 8
 SHARDS = 40  # must match DETAIL_SHARDS in assets/site.js
 MAIN = {"Vape": "vape", "Hookah": "hookah", "Snus": "snus"}
 SKIP = {"December Sale", "NEW ARRIVALS", "Uncategorized", "MTL", "Vape", "Hookah"}
@@ -38,7 +39,8 @@ for batch in pages():
         puffs = re.search(r"(\d{1,3}(?:[ ,]\d{3})+|\d+(?:\.\d+)?)\s*k?\s*puffs?", name, re.I)  # "16 000 Puff", "20k puffs"
         mg = re.search(r"(\d+(?:\.\d+)?)\s*mg", name, re.I)
         img = p["images"][0] if p["images"] else {}
-        attrs = {a["name"]: ", ".join(t["name"] for t in a["terms"]) for a in p["attributes"] if a.get("terms")}
+        # their store attaches every term in the shop to many products (e.g. all 712 flavours); keep only real, short lists
+        attrs = {a["name"]: ", ".join(t["name"] for t in a["terms"]) for a in p["attributes"] if a.get("terms") and len(a["terms"]) <= MAX_TERMS}
         desc = text(p["short_description"] or p["description"], 700)
         details[p["id"]] = {"i": img.get("src", ""), "d": "" if desc.lower() in ("none", "") else desc, "a": attrs}
         out.append({

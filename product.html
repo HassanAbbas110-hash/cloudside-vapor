@@ -23,6 +23,9 @@
 .stock i{width:8px;height:8px;border-radius:50%;background:var(--ok)}
 .specs{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
 .specs div{padding:10px 12px;border-radius:10px;background:var(--panel);border:1px solid var(--line);font-size:14px;font-weight:600}
+.specs .multi{grid-column:1/-1}
+.specs .opts{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.specs .opts i{font-style:normal;font-size:13px;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.07)}
 .specs small{display:block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);font-weight:700}
 .buy{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .buy .qty{margin:0;height:48px}
@@ -77,7 +80,8 @@ Promise.all([loadProducts(), loadDetail(id)]).then(([all, det]) => {
   const sub = SUBNAME[p.s] || p.s;
   document.title = `${p.n} · Cloudside Vapor`;
   $("#c-sub").textContent = sub; $("#c-sub").href = `shop.html?s=${encodeURIComponent(p.s)}`;
-  const specs = { ...det.a };
+  // display guard: never print a dumped list, and show real option lists as chips
+  const specs = Object.fromEntries(Object.entries(det.a || {}).filter(([, v]) => v.split(", ").length <= 8 && v.length <= 160));
   if (p.puffs && !specs.Puffs) specs.Puffs = (parseFloat(p.puffs) < 100 ? p.puffs + "k" : fmtN(p.puffs));
   if (p.mg && !specs.Strength) specs.Strength = p.mg + "mg";
   if (p.b) specs.Brand = p.b;
@@ -89,7 +93,8 @@ Promise.all([loadProducts(), loadDetail(id)]).then(([all, det]) => {
       ${p.b ? `<a class="br" href="shop.html?b=${encodeURIComponent(p.b)}">${esc(p.b)}</a>` : ""}
       <h1>${esc(p.n)}</h1>
       <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">${priceHtml(p)}<span class="stock"><i></i>In stock</span></div>
-      <div class="specs">${Object.entries(specs).map(([k, v]) => `<div><small>${esc(k)}</small>${esc(v)}</div>`).join("")}</div>
+      <div class="specs">${Object.entries(specs).map(([k, v]) => { const parts = v.split(", ");
+        return parts.length > 1 ? `<div class="multi"><small>${esc(k)} · ${parts.length} options</small><span class="opts">${parts.map((x) => `<i>${esc(x)}</i>`).join("")}</span></div>` : `<div><small>${esc(k)}</small>${esc(v)}</div>`; }).join("")}</div>
       ${p.var ? `<p class="note">This comes in a few options (flavour or strength). Add it to your bag and tell us which one in the note, or ask us on WhatsApp.</p>` : ""}
       ${p.p ? `<div class="buy">
         <span class="qty"><button id="qm" aria-label="One less">−</button><label class="sr" for="qn">Quantity</label><input id="qn" type="number" min="1" max="50" value="1" inputmode="numeric"><button id="qp" aria-label="One more">+</button></span>
