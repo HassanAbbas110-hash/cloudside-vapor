@@ -1,6 +1,6 @@
 /* Cloudside Vapor — shared styles. Dark shop floor, warm paper for the "about us" moments, one red. */
 :root{
-  --bg:#0d0c0c; --panel:#161414; --panel2:#1d1a1a; --line:#2b2727; --ink:#f3eee8; --mute:#a69e97; --dim:#6f6863;
+  --bg:#0d0c0c; --panel:#161414; --panel2:#1d1a1a; --line:#2b2727; --ink:#f3eee8; --mute:#a69e97; --dim:#8c847e;
   --red:#e3101f; --red-hi:#ff2e3d; --red-soft:rgba(227,16,31,.14);
   --paper:#f1ebe3; --paper-ink:#1c1817; --paper-mute:#6b625c; --paper-line:#ddd3c8;
   --ok:#2fbf71; --warn:#e8a33a;

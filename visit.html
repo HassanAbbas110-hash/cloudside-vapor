@@ -38,6 +38,7 @@
 </style>
 </head>
 <body data-page="visit">
+<script src="assets/site.js"></script>
 <main id="main">
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><span>Visit the shop</span></nav>
@@ -80,7 +81,6 @@
     </div>
   </section>
 </main>
-<script src="assets/site.js"></script>
 <script>
 $$("[data-i]").forEach((el) => { if (el.classList.contains("ic")) el.innerHTML = I[el.dataset.i]; else el.outerHTML = I[el.dataset.i]; });
 $("#map").src = "https://maps.google.com/maps?q=" + encodeURIComponent(CONFIG.mapsQuery) + "&z=15&output=embed";

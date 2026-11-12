@@ -48,6 +48,7 @@
 </style>
 </head>
 <body data-page="shop">
+<script src="assets/site.js"></script>
 <main id="main">
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><a href="shop.html">Shop</a><span>/</span><a id="c-sub" href="shop.html">…</a></nav>
@@ -56,7 +57,6 @@
   <section class="sec" id="rel-sec" hidden style="padding-top:20px"><div class="wrap"><div class="sec-head"><h2 style="font-size:36px">You might also like</h2><a class="btn btn-line btn-sm" id="rel-more" href="shop.html">See more</a></div><div class="rail" id="rel"></div></div></section>
   <section class="sec" id="seen-sec" hidden style="padding-top:0"><div class="wrap"><div class="sec-head"><h2 style="font-size:36px">Recently viewed</h2></div><div class="rail" id="seen"></div></div></section>
 </main>
-<script src="assets/site.js"></script>
 <script>
 const id = +new URLSearchParams(location.search).get("id");
 const SUBNAME = { "E Liquids": "E-liquids", "Nic Salts": "Nic salts", "Devices": "Pod kits & devices", "Hookah Flavour": "Shisha flavours", "Coal": "Coals" };

@@ -33,6 +33,7 @@
 </style>
 </head>
 <body data-page="about">
+<script src="assets/site.js"></script>
 <main id="main">
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><span>About us</span></nav>
@@ -82,7 +83,6 @@
     </div>
   </section>
 </main>
-<script src="assets/site.js"></script>
 <script>
 loadProducts().then((all) => {
   const fmt = (n) => n.toLocaleString("en-ZA").replace(/ /g, " ");

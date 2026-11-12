@@ -74,7 +74,7 @@ function cardHtml(p) {
   return `<article class="card">
     <div class="ph">${imgHtml(p)}<div class="flags">${p.new ? '<span class="flag">New in</span>' : ""}</div>
       <button class="fav${fav ? " on" : ""}" data-fav="${p.id}" aria-pressed="${fav}" aria-label="Save ${esc(p.n)}">${I.heart}</button></div>
-    <div class="bd"><span class="br">${esc(p.b || p.s)}</span><h3 class="nm"><a href="${productUrl(p)}">${esc(p.n)}</a></h3>
+    <div class="bd"><span class="br">${esc(p.b || p.s)}</span><p class="nm"><a href="${productUrl(p)}">${esc(p.n)}</a></p>
       <div class="ft">${priceHtml(p)}${p.p ? `<button class="add" data-add="${p.id}" aria-label="Add ${esc(p.n)} to bag">${I.plus}</button>` : ""}</div></div></article>`;
 }
 const slim = (p) => ({ id: p.id, n: p.n, p: p.p, t: p.t, u: p.u, b: p.b, s: p.s, var: p.var });
@@ -158,7 +158,8 @@ function toast(text, action, fn) {
 }
 
 /* ---------- chrome (strip, header, footer, drawer, gate) ---------- */
-function chrome() {
+// top runs while the page is still parsing (script sits at the start of <body>), so nothing shifts
+function chromeTop() {
   const page = document.body.dataset.page;
   const nav = [["shop.html", "Shop", "shop"], ["shop.html?c=vape", "Vape", ""], ["shop.html?c=hookah", "Hookah", ""], ["about.html", "About us", "about"], ["visit.html", "Visit the shop", "visit"], ["help.html", "Delivery & help", "help"]];
   const navLinks = nav.map(([h, t, k]) => `<a href="${h}"${k && k === page ? ' aria-current="page"' : ""}>${t}</a>`).join("");
@@ -178,7 +179,10 @@ function chrome() {
     <form class="hsearch" action="shop.html" role="search" style="display:flex;max-width:none;margin:0 0 14px">${I.search}<label class="sr" for="mq">Search products</label><input id="mq" name="q" type="search" placeholder="Search products"></form>
     ${nav.map(([h, t]) => `<a href="${h}">${t}</a>`).join("")}
     <div class="mfoot"><span>${CONFIG.address.join(", ")}</span><a href="tel:${CONFIG.phone.replace(/\s/g, "")}">${CONFIG.phone}</a></div></div>`);
+  renderCounts();
+}
 
+function chromeBottom() {
   document.body.insertAdjacentHTML("beforeend", `
   <footer class="ftr"><div class="wrap">
     <div class="ftr-grid">
@@ -193,7 +197,7 @@ function chrome() {
   </div></footer>
   <a class="wa-float" href="${wa("Hi Cloudside!")}" target="_blank" rel="noopener" aria-label="Chat to us on WhatsApp">${I.wa}</a>
   <div class="scrim" id="scrim"></div>
-  <aside class="drawer" id="drawer" aria-label="Your bag" role="dialog" aria-modal="true">
+  <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Your bag">
     <div class="dh"><h3>Your bag</h3><button class="x" data-close aria-label="Close">${I.x}</button></div>
     <div class="db"></div>
     <div class="df">
@@ -204,7 +208,7 @@ function chrome() {
       <div class="tot"><span class="muted">Total</span><strong id="d-total">R0</strong></div>
       <button class="btn btn-wa" id="d-send">${I.wa} Send order on WhatsApp</button>
       <p class="fine">We check stock and confirm delivery costs and payment with you on WhatsApp before anything is charged. ID required on collection and delivery.</p>
-    </div></aside>
+    </div></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <div class="gate" id="gate" hidden role="dialog" aria-modal="true" aria-labelledby="gate-h"><div class="gate-in" id="gate-in"></div></div>`);
 
@@ -267,6 +271,5 @@ function reveal() {
   $$(".rv").forEach((el) => { if (el.getBoundingClientRect().top < innerHeight) el.classList.add("in"); io.observe(el); });
 }
 
-chrome();
-gate();
-reveal();
+chromeTop();
+document.addEventListener("DOMContentLoaded", () => { chromeBottom(); gate(); reveal(); });
