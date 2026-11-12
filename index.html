@@ -114,24 +114,25 @@
 <script src="assets/site.js"></script>
 <main id="main">
 
-<section class="hero">
-  <div class="smoke" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<section class="hero intro">
+  <div class="smoke" aria-hidden="true"><i></i><i></i><i></i><i></i><b class="ember" style="left:8%;animation-delay:-0s;--dx:40px"></b><b class="ember" style="left:17%;animation-delay:-3.1s;--dx:-30px"></b><b class="ember" style="left:29%;animation-delay:-6.2s;--dx:20px"></b><b class="ember" style="left:41%;animation-delay:-1.4s;--dx:-50px"></b><b class="ember" style="left:52%;animation-delay:-4.6s;--dx:35px"></b><b class="ember" style="left:63%;animation-delay:-7.7s;--dx:-20px"></b><b class="ember" style="left:74%;animation-delay:-2.3s;--dx:45px"></b><b class="ember" style="left:83%;animation-delay:-5.4s;--dx:-35px"></b><b class="ember" style="left:92%;animation-delay:-8.1s;--dx:25px"></b></div>
+  <div class="spot" aria-hidden="true"></div>
   <div class="wrap hero-in">
     <div>
-      <span class="tag">Atlas Junction · Boksburg · Open 7 days</span>
-      <h1>Boksburg's home of big <span class="script">clouds</span></h1>
-      <p class="lead">Disposables, pod kits, juices, shisha and snus: <b><span data-count-all>2 277</span> products on the shelf</b> at Atlas Junction right now. Pop in, or order here and collect, get it couriered anywhere in SA, or have it at your door with <b>7Waves</b>.</p>
-      <div class="ctas">
+      <span class="tag fade">Atlas Junction · Boksburg · Open 7 days</span>
+      <h1><span class="w"><span>Boksburg's</span></span> <span class="w"><span>home</span></span> <span class="w"><span>of</span></span> <span class="w"><span>big</span></span> <span class="script">clouds</span></h1>
+      <p class="lead fade d1">Disposables, pod kits, juices, shisha and snus: <b><span data-count-all>2 277</span> products on the shelf</b> at Atlas Junction right now. Pop in, or order here and collect, get it couriered anywhere in SA, or have it at your door with <b>7Waves</b>.</p>
+      <div class="ctas fade d2">
         <a class="btn btn-red" href="shop.html">Shop what's in stock <span data-i="arrow"></span></a>
         <a class="btn btn-line" href="#finder">Find my flavour</a>
       </div>
-      <div class="facts">
+      <div class="facts fade d3">
         <div><b data-count-all>2 277</b>in stock</div>
         <div><b data-count-brands>158</b>brands</div>
         <div><b>3</b>ways to get it</div>
       </div>
     </div>
-    <div class="frame">
+    <div class="frame" data-tilt>
       <div class="ph"><img src="assets/img/shopfront.webp" alt="The Cloudside Vapor shopfront at Atlas Junction, with hookahs and vape shelves inside" width="600" height="583" fetchpriority="high"></div>
       <img class="sticker" src="assets/img/logo.webp" alt="" width="420" height="281">
       <div class="chipf a"><span data-i="bag"></span><div><b data-count-all>2 277</b><br>in stock today</div></div>
@@ -159,7 +160,7 @@
 
 <section class="sec" style="padding-top:0" id="finder">
   <div class="wrap">
-    <div class="finder rv">
+    <div class="finder ring rv">
       <div class="side">
         <span class="tag">30-second quiz</span>
         <h2>Vape <span class="script">finder</span></h2>
@@ -284,22 +285,12 @@ function drawQuiz() {
 }
 drawQuiz();
 
-/* tilt on hover (mouse only) */
-if (matchMedia("(pointer:fine)").matches && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  document.addEventListener("pointermove", (e) => {
-    const c = e.target.closest(".cat"); if (!c) return;
-    const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
-    c.style.transform = `perspective(800px) rotateY(${x * 9}deg) rotateX(${-y * 9}deg)`;
-  });
-  document.addEventListener("pointerout", (e) => { const c = e.target.closest(".cat"); if (c && !c.contains(e.relatedTarget)) c.style.transform = ""; });
-}
-
 loadProducts().then((all) => {
   ALL = all;
-  $$("[data-count-all]").forEach((el) => (el.textContent = fmt(all.length)));
+  $$("[data-count-all]").forEach((el) => countUp(el, all.length));
   const brandCounts = {};
   all.forEach((p) => p.b && (brandCounts[p.b] = (brandCounts[p.b] || 0) + 1));
-  $$("[data-count-brands]").forEach((el) => (el.textContent = Object.keys(brandCounts).length));
+  $$("[data-count-brands]").forEach((el) => countUp(el, Object.keys(brandCounts).length));
   $("#cats").innerHTML = TILES.map(([name, q, fn]) => {
     const list = all.filter(fn), pic = list.find((p) => p.t);
     return `<a class="cat" href="shop.html?${q}"><div class="im">${pic ? `<img src="${esc(pic.t)}" alt="" loading="lazy" width="150" height="150">` : ""}</div>

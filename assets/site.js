@@ -75,9 +75,9 @@ const imgHtml = (p, big) => {
     ? `<img src="${esc(src)}" alt="${esc(p.n)}" loading="${big ? "eager" : "lazy"}" decoding="async" width="300" height="300" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'noimg',innerHTML:'<img src=&quot;assets/img/logo-sm.webp&quot; alt=&quot;&quot;><span>Photo coming soon</span>'}))">`
     : `<div class="noimg"><img src="assets/img/logo-sm.webp" alt=""><span>Photo coming soon</span></div>`;
 };
-function cardHtml(p) {
+function cardHtml(p, i = 0) {
   const fav = isFav(p.id);
-  return `<article class="card">
+  return `<article class="card" style="--i:${i % 12}">
     <div class="ph">${imgHtml(p)}<div class="flags">${p.new ? '<span class="flag">New in</span>' : ""}</div>
       <button class="fav${fav ? " on" : ""}" data-fav="${p.id}" aria-pressed="${fav}" aria-label="Save ${esc(p.n)}">${I.heart}</button></div>
     <div class="bd"><span class="br">${esc(p.b || p.s)}</span><p class="nm"><a href="${productUrl(p)}">${esc(p.n)}</a></p>
@@ -90,6 +90,22 @@ let cart = store.get("cv_cart", []);
 let favs = store.get("cv_favs", []);
 const isFav = (id) => favs.some((f) => f.id === id);
 function saveCart() { store.set("cv_cart", cart); renderCounts(); if ($("#drawer")?.classList.contains("on") && drawerMode === "cart") renderDrawer(); }
+// a copy of the product photo flies into the bag icon
+function flyToBag(src) {
+  const bag = $("#bag-btn");
+  if (!src || !bag || matchMedia("(prefers-reduced-motion: reduce)").matches || !Element.prototype.animate) return;
+  const a = src.getBoundingClientRect(), b = bag.getBoundingClientRect();
+  if (!a.width) return;
+  const g = src.cloneNode(); g.className = "fly"; g.removeAttribute("loading");
+  Object.assign(g.style, { left: a.left + "px", top: a.top + "px", width: a.width + "px", height: a.height + "px" });
+  document.body.appendChild(g);
+  const dx = b.left + b.width / 2 - (a.left + a.width / 2), dy = b.top + b.height / 2 - (a.top + a.height / 2);
+  g.animate([
+    { transform: "translate(0,0) scale(1)", opacity: 1 },
+    { transform: `translate(${dx * .55}px,${dy * .55 - 90}px) scale(.45) rotate(-12deg)`, opacity: 1, offset: .55 },
+    { transform: `translate(${dx}px,${dy}px) scale(.08) rotate(-25deg)`, opacity: .4 }
+  ], { duration: 750, easing: "cubic-bezier(.5,0,.3,1)" }).onfinish = () => g.remove();
+}
 function addToCart(p, q = 1) {
   const line = cart.find((l) => l.id === p.id);
   line ? (line.q += q) : cart.push({ ...slim(p), q });
@@ -173,6 +189,7 @@ function chromeTop() {
   const navLinks = nav.map(([h, t, k]) => `<a href="${h}"${k && k === page ? ' aria-current="page"' : ""}>${t}</a>`).join("");
   document.body.insertAdjacentHTML("afterbegin", `
   <a class="sr" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
   <div class="strip"><div class="wrap"><span>Courier anywhere in SA &middot; Fast local delivery with 7Waves</span><span>Shop at Atlas Junction, Boksburg · ${CONFIG.hoursNote}</span><span>Strictly 18+</span></div></div>
   <header class="hdr"><div class="wrap hdr-in">
     <a class="logo" href="index.html" aria-label="Cloudside Vapor home"><img src="assets/img/logo-sm.webp" alt="Cloudside Vapor" width="180" height="121"></a>
@@ -256,6 +273,7 @@ document.addEventListener("click", async (e) => {
     const id = +t.dataset.add, p = byId.get(id) || favs.find((f) => f.id === id) || (await loadProducts(), byId.get(id));
     if (!p) return;
     const qtyEl = t.dataset.qty ? $(t.dataset.qty) : null;
+    flyToBag((t.closest(".card,.pd,.li,.res") || document).querySelector(".ph > img, .pic > img, .th img"));
     addToCart(p, qtyEl ? Math.max(1, +qtyEl.value || 1) : 1);
     if (t.classList.contains("add")) { t.classList.add("ok"); t.innerHTML = I.check; setTimeout(() => { t.classList.remove("ok"); t.innerHTML = I.plus; }, 1200); }
   } else if (t.dataset.fav) { e.preventDefault(); const id = +t.dataset.fav; toggleFav(byId.get(id) || favs.find((f) => f.id === id)); }
@@ -282,7 +300,7 @@ document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeDra
 /* ---------- review card, socials, marquee (shared blocks) ---------- */
 function communityHtml() {
   return `<div class="comm">
-    <div class="rev rv"><span class="tag">Been in to see us?</span>
+    <div class="rev ring rv"><span class="tag">Been in to see us?</span>
       <h3>Tell Boksburg <span class="script">how it went</span></h3>
       <div class="stars" role="radiogroup" aria-label="Rate your visit">${[1, 2, 3, 4, 5].map((n) => `<button data-s="${n}" role="radio" aria-checked="false" aria-label="${n} star${n > 1 ? "s" : ""}">★</button>`).join("")}</div>
       <p class="rev-msg">Tap a star. Happy visits go to Google, where a quick review helps the next person find us. Anything less comes straight to us, so we can fix it.</p>
@@ -313,13 +331,44 @@ function mountShared() {
   $$("[data-marquee]").forEach((el) => { const h = el.dataset.marquee.split("|").map((w) => `<span>${esc(w)}</span>`).join(""); el.innerHTML = `<div class="mq">${h.repeat(4)}</div>`; });
 }
 
+/* numbers tick up to their value */
+function countUp(el, to) {
+  const fmt = (n) => Math.round(n).toLocaleString("en-ZA").replace(/\u00a0/g, " ");
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = fmt(to); return; }
+  const t0 = performance.now(), from = 0;
+  const tick = (t) => { const k = Math.min((t - t0) / 1300, 1); el.textContent = fmt(from + (to - from) * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(tick); };
+  requestAnimationFrame(tick);
+}
+
+/* mouse-only flourishes: magnetic buttons, tilt, hero spotlight */
+function pointerFx() {
+  if (!matchMedia("(pointer:fine)").matches || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  let raf = 0, last;
+  document.addEventListener("pointermove", (e) => {
+    last = e; if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = 0; const ev = last;
+      const m = ev.target.closest?.(".btn-red,.btn-white,.btn-wa,.btn-wave");
+      if (m) { const r = m.getBoundingClientRect(); m.classList.add("mag"); m.style.transform = `translate(${(ev.clientX - r.left - r.width / 2) * .22}px,${(ev.clientY - r.top - r.height / 2) * .3}px)`; }
+      const c = ev.target.closest?.(".cat,[data-tilt]");
+      if (c) { const r = c.getBoundingClientRect(), x = (ev.clientX - r.left) / r.width - .5, y = (ev.clientY - r.top) / r.height - .5; c.style.transform = `perspective(900px) rotateY(${x * 9}deg) rotateX(${-y * 9}deg)`; }
+      const h = ev.target.closest?.(".hero"), sp = h && $(".spot", h);
+      if (sp) { const r = h.getBoundingClientRect(); sp.style.transform = `translate(${ev.clientX - r.left}px,${ev.clientY - r.top}px)`; }
+    });
+  }, { passive: true });
+  document.addEventListener("pointerout", (e) => {
+    const el = e.target.closest?.(".mag,.cat,[data-tilt]");
+    if (el && !el.contains(e.relatedTarget)) el.style.transform = "";
+  });
+}
+
 /* reveal on scroll: content stays visible if this never runs */
 function reveal() {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
   document.documentElement.classList.add("rv-on");
   const io = new IntersectionObserver((es) => es.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }), { rootMargin: "0px 0px -8% 0px" });
-  $$(".rv").forEach((el) => { if (el.getBoundingClientRect().top < innerHeight) el.classList.add("in"); io.observe(el); });
+  $$(".rv,.sec-head").forEach((el) => { if (el.getBoundingClientRect().top < innerHeight) el.classList.add("in"); io.observe(el); });
 }
 
 chromeTop();
-document.addEventListener("DOMContentLoaded", () => { chromeBottom(); mountShared(); gate(); reveal(); });
+document.addEventListener("DOMContentLoaded", () => { chromeBottom(); mountShared(); gate(); reveal(); pointerFx(); });

@@ -352,3 +352,77 @@ h1 .script,h2 .script{display:inline-block;font-size:.82em;transform:rotate(-4de
 @media (max-width:760px){.mq span{font-size:22px;gap:30px}.marquee.alt{margin-top:-34px}}
 
 .df.waves .pickup{display:none}
+
+/* ===== motion layer: everything here is transform/opacity/clip so it stays on the GPU ===== */
+/* page-to-page cross-fade (browsers without support just navigate normally) */
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vt-out .28s ease both}
+::view-transition-new(root){animation:vt-in .42s var(--ease) both}
+@keyframes vt-out{to{opacity:0;transform:translateY(-10px)}}
+@keyframes vt-in{from{opacity:0;transform:translateY(16px)}}
+header.hdr{view-transition-name:hdr}
+
+/* scroll progress bar */
+.progress{position:fixed;left:0;right:0;top:0;height:3px;z-index:70;background:linear-gradient(90deg,var(--red),#ff7a85);transform-origin:0 50%;transform:scaleX(0);pointer-events:none}
+@supports (animation-timeline:scroll()){.progress{animation:grow linear both;animation-timeline:scroll(root)}}
+@keyframes grow{to{transform:scaleX(1)}}
+
+/* headings: the script word writes itself in */
+.rv-on .sec-head .script{clip-path:inset(-20% 100% -20% 0);transition:clip-path 1.1s var(--ease) .25s}
+.rv-on .sec-head.in .script{clip-path:inset(-20% -10% -20% 0)}
+
+/* cards: staggered entrance, light sweep, lift */
+.card{animation:cardIn .55s var(--ease) both;animation-delay:calc(var(--i,0) * 45ms)}
+@keyframes cardIn{from{opacity:0;transform:translateY(18px) scale(.97)}}
+.card .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);transform:translateX(-120%);transition:transform .8s var(--ease);pointer-events:none}
+.card:hover .ph::after{transform:translateX(120%)}
+.card:hover{box-shadow:0 26px 50px -24px rgba(0,0,0,.9),0 0 0 1px rgba(227,16,31,.25)}
+
+/* magnetic buttons get a smooth return */
+.mag{transition:transform .35s var(--ease),background .2s,box-shadow .2s}
+
+/* fly-to-bag ghost */
+.fly{position:fixed;z-index:160;pointer-events:none;border-radius:14px;background:#fff;box-shadow:0 20px 40px rgba(0,0,0,.5);object-fit:contain}
+
+/* hero intro */
+.intro .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.06em;margin-bottom:-.06em}
+.intro .w>span{display:inline-block;animation:rise .9s var(--ease) both}
+.intro .w:nth-child(2)>span{animation-delay:.08s}.intro .w:nth-child(3)>span{animation-delay:.16s}.intro .w:nth-child(4)>span{animation-delay:.24s}
+.intro .script{animation:ink 1.2s var(--ease) .45s both}
+@keyframes rise{from{transform:translateY(105%)}}
+@keyframes ink{from{clip-path:inset(-30% 100% -30% 0)}to{clip-path:inset(-30% -10% -30% 0)}}
+.intro .fade{animation:fadeUp .8s var(--ease) both}
+.intro .d1{animation-delay:.35s}.intro .d2{animation-delay:.5s}.intro .d3{animation-delay:.65s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}}
+.intro .frame .ph{animation:frameIn 1.1s var(--ease) .15s both}
+@keyframes frameIn{from{opacity:0;transform:rotate(8deg) scale(.88) translateY(30px)}}
+.intro .sticker{animation:stickIn .9s cubic-bezier(.3,1.6,.5,1) .8s both,bob 7s ease-in-out 1.7s infinite}
+@keyframes stickIn{from{opacity:0;transform:rotate(-30deg) scale(.3)}}
+.intro .chipf{animation:pop .7s cubic-bezier(.3,1.5,.5,1) both,bob 6s ease-in-out infinite}
+.intro .chipf.a{animation-delay:1s,1.7s}.intro .chipf.b{animation-delay:1.15s,2s}
+@keyframes pop{from{opacity:0;transform:scale(.6) translateY(14px)}}
+
+/* hero cursor spotlight + embers */
+.spot{position:absolute;left:0;top:0;width:620px;height:620px;margin:-310px 0 0 -310px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,60,75,.18),transparent);pointer-events:none;z-index:0;opacity:0;transition:opacity .4s;will-change:transform}
+.hero:hover .spot{opacity:1}
+.ember{position:absolute;bottom:-10px;width:4px;height:4px;border-radius:50%;background:#ff4d5a;box-shadow:0 0 10px 2px rgba(255,60,75,.7);opacity:0;animation:ember 9s linear infinite;pointer-events:none}
+.ember:nth-of-type(2n){background:#fff;box-shadow:0 0 8px 1px rgba(255,255,255,.6);width:3px;height:3px}
+@keyframes ember{0%{opacity:0;transform:translate3d(0,0,0)}10%{opacity:.9}70%{opacity:.5}100%{opacity:0;transform:translate3d(var(--dx,30px),-95vh,0)}}
+
+/* glowing animated border (vape finder, review card) */
+@property --ang{syntax:"<angle>";inherits:false;initial-value:0deg}
+.ring{position:relative}
+.ring::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;background:conic-gradient(from var(--ang),transparent 0 55%,#ff2e3d 70%,#ffb3ba 78%,transparent 90%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spin 6s linear infinite;pointer-events:none;z-index:2}
+@keyframes spin{to{--ang:360deg}}
+
+/* marquee pauses when you hover it */
+.marquee:hover .mq{animation-play-state:paused}
+
+/* buttons: arrow nudges */
+.btn svg{transition:transform .3s var(--ease)}
+.btn:hover svg{transform:translateX(3px)}
+
+@media (prefers-reduced-motion:reduce){
+  .rv-on .sec-head .script{clip-path:none}
+  .ember,.spot,.ring::before{display:none}
+}
