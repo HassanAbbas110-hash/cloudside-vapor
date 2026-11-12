@@ -90,7 +90,6 @@
 <script src="assets/fits.js"></script>
 <main id="main">
   <section class="fhero">
-    <div class="smoke" aria-hidden="true"><i></i><i></i><i></i></div>
     <div class="wrap">
       <div>
         <nav class="crumbs" aria-label="Breadcrumb" style="padding-top:0"><a href="index.html">Home</a><span>/</span><span>Coil &amp; Pod Finder</span></nav>
@@ -232,8 +231,9 @@ document.addEventListener("click", (e) => {
 
 loadProducts().then((all) => {
   ALL = all;
-  countUp($("#n-dev"), FITS.length);
-  countUp($("#n-fit"), all.filter((p) => familiesForCoil(p).length).length);
+  // plain numbers here: animating them re-lays out the whole results page every frame
+  $("#n-dev").textContent = FITS.length;
+  $("#n-fit").textContent = all.filter((p) => familiesForCoil(p).length).length;
   const start = FITS.find((f) => f.id === new URLSearchParams(location.search).get("d"));
   start ? choose(start, false) : (drawBrands(), drawMine());
 });
