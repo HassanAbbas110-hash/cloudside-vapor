@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Product · Cloudside Vapor</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0d0c0c">
+<link rel="icon" href="assets/img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.pd{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding-block:24px 64px;align-items:start}
+.pic{position:sticky;top:calc(var(--hdr) + 20px);aspect-ratio:1;border-radius:20px;background:#fff;overflow:hidden;display:grid;place-items:center}
+.pic>img{width:100%;height:100%;object-fit:contain;padding:28px}
+.pic .noimg img{width:45%}
+.info{display:grid;gap:18px}
+.info .br{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red-hi)}
+.info h1{font-size:clamp(34px,4.4vw,52px);text-transform:none;line-height:1.02}
+.info .price{font-size:44px}
+.stock{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--ok)}
+.stock i{width:8px;height:8px;border-radius:50%;background:var(--ok)}
+.specs{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.specs div{padding:10px 12px;border-radius:10px;background:var(--panel);border:1px solid var(--line);font-size:14px;font-weight:600}
+.specs small{display:block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);font-weight:700}
+.buy{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.buy .qty{margin:0;height:48px}
+.buy .qty button{width:42px;height:46px;font-size:18px}
+.buy .qty input{width:40px;text-align:center;background:none;border:0;font-weight:700;font-size:15px;outline:0;-moz-appearance:textfield}
+.buy .qty input::-webkit-inner-spin-button{display:none}
+.buy .btn-red{flex:1;min-width:180px}
+.favbig{width:48px;height:48px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center}
+.favbig svg{width:20px;height:20px}
+.favbig.on svg{fill:var(--red-hi);stroke:var(--red-hi)}
+.alt{display:flex;gap:10px;flex-wrap:wrap}
+.alt .btn{flex:1;min-width:200px}
+.box{border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.box div{display:flex;gap:12px;padding:14px 16px;font-size:14px;color:var(--mute)}
+.box div+div{border-top:1px solid var(--line)}
+.box svg{width:20px;height:20px;color:var(--red-hi);flex:none}
+.box b{color:var(--ink);font-weight:600}
+.desc{color:var(--mute);font-size:15px;max-width:62ch}
+.desc h2{font-size:22px;color:var(--ink);margin-bottom:8px}
+.share{font-size:13.5px;color:var(--mute);text-decoration:underline;justify-self:start}
+.nf{padding:80px 0;text-align:center;display:grid;gap:14px;justify-items:center}
+@media (max-width:860px){.pd{grid-template-columns:1fr;gap:24px}.pic{position:static}}
+</style>
+</head>
+<body data-page="shop">
+<main id="main">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><a href="shop.html">Shop</a><span>/</span><a id="c-sub" href="shop.html">…</a></nav>
+    <div id="pd"><div class="pd"><div class="pic"></div><div class="info"><p class="muted">Loading…</p></div></div></div>
+  </div>
+  <section class="sec" id="rel-sec" hidden style="padding-top:20px"><div class="wrap"><div class="sec-head"><h2 style="font-size:36px">You might also like</h2><a class="btn btn-line btn-sm" id="rel-more" href="shop.html">See more</a></div><div class="rail" id="rel"></div></div></section>
+  <section class="sec" id="seen-sec" hidden style="padding-top:0"><div class="wrap"><div class="sec-head"><h2 style="font-size:36px">Recently viewed</h2></div><div class="rail" id="seen"></div></div></section>
+</main>
+<script src="assets/site.js"></script>
+<script>
+const id = +new URLSearchParams(location.search).get("id");
+const SUBNAME = { "E Liquids": "E-liquids", "Nic Salts": "Nic salts", "Devices": "Pod kits & devices", "Hookah Flavour": "Shisha flavours", "Coal": "Coals" };
+
+Promise.all([loadProducts(), loadDetail(id)]).then(([all, det]) => {
+  const p = byId.get(id);
+  if (!p) {
+    $("#pd").innerHTML = `<div class="nf"><h1 style="font-size:44px">This one's sold out</h1><p class="muted">Or the link is old. We only list what's in stock, so have a look at what's on the shelf now.</p><a class="btn btn-red" href="shop.html">Browse the shop</a></div>`;
+    $("#c-sub").textContent = "Not found"; return;
+  }
+  const sub = SUBNAME[p.s] || p.s;
+  document.title = `${p.n} · Cloudside Vapor`;
+  $("#c-sub").textContent = sub; $("#c-sub").href = `shop.html?s=${encodeURIComponent(p.s)}`;
+  const specs = { ...det.a };
+  if (p.puffs && !specs.Puffs) specs.Puffs = (parseFloat(p.puffs) < 100 ? p.puffs + "k" : fmtN(p.puffs));
+  if (p.mg && !specs.Strength) specs.Strength = p.mg + "mg";
+  if (p.b) specs.Brand = p.b;
+  specs.Category = sub;
+  const fav = isFav(p.id);
+  $("#pd").innerHTML = `<div class="pd">
+    <div class="pic">${imgHtml({ ...p, i: det.i }, true)}</div>
+    <div class="info">
+      ${p.b ? `<a class="br" href="shop.html?b=${encodeURIComponent(p.b)}">${esc(p.b)}</a>` : ""}
+      <h1>${esc(p.n)}</h1>
+      <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">${priceHtml(p)}<span class="stock"><i></i>In stock</span></div>
+      <div class="specs">${Object.entries(specs).map(([k, v]) => `<div><small>${esc(k)}</small>${esc(v)}</div>`).join("")}</div>
+      ${p.var ? `<p class="note">This comes in a few options (flavour or strength). Add it to your bag and tell us which one in the note, or ask us on WhatsApp.</p>` : ""}
+      ${p.p ? `<div class="buy">
+        <span class="qty"><button id="qm" aria-label="One less">−</button><label class="sr" for="qn">Quantity</label><input id="qn" type="number" min="1" max="50" value="1" inputmode="numeric"><button id="qp" aria-label="One more">+</button></span>
+        <button class="btn btn-red" data-add="${p.id}" data-qty="#qn">${I.bag} Add to bag</button>
+        <button class="favbig${fav ? " on" : ""}" data-fav="${p.id}" aria-pressed="${fav}" aria-label="Save to favourites">${I.heart}</button></div>` : ""}
+      <div class="alt">
+        ${p.p ? `<a class="btn btn-line" id="buynow" href="${buyOnlineUrl(p)}" target="_blank" rel="noopener">Buy now with online checkout ${I.out}</a>` : ""}
+        <a class="btn btn-wa" href="${wa(`Hi Cloudside, I have a question about ${p.n}: `)}" target="_blank" rel="noopener">${I.wa} Ask about this</a>
+      </div>
+      <div class="box">
+        <div>${I.pin}<span><b>Collect in Boksburg.</b> Order it here and pick it up at Atlas Junction once we've confirmed on WhatsApp.</span></div>
+        <div>${I.truck}<span><b>Delivery anywhere in South Africa.</b> We'll confirm the cost and the delivery time before you pay.</span></div>
+        <div>${I.clock}<span><b>18+ only.</b> We check ID on collection and on delivery.</span></div>
+      </div>
+      ${det.d ? `<div class="desc"><h2>About this product</h2><p>${esc(det.d)}</p></div>` : ""}
+      <button class="share" id="share">Share this product</button>
+    </div></div>`;
+
+  const qn = $("#qn");
+  if (qn) {
+    $("#qm").onclick = () => { qn.value = Math.max(1, +qn.value - 1); syncBuy(); };
+    $("#qp").onclick = () => { qn.value = Math.min(50, +qn.value + 1); syncBuy(); };
+    qn.oninput = syncBuy;
+  }
+  function syncBuy() { const b = $("#buynow"); if (b) b.href = buyOnlineUrl(p, Math.max(1, +qn.value || 1)); }
+  $("#share").onclick = async () => {
+    const data = { title: p.n, text: `${p.n} at Cloudside Vapor`, url: location.href };
+    try { if (navigator.share) await navigator.share(data); else { await navigator.clipboard.writeText(location.href); toast("Link copied"); } } catch {}
+  };
+
+  // related: same type, same brand first
+  const rel = all.filter((x) => x.id !== p.id && x.s === p.s).sort((a, b) => ((b.b === p.b) - (a.b === p.b)) || (!!b.t - !!a.t)).slice(0, 12);
+  if (rel.length) { $("#rel").innerHTML = rel.map(cardHtml).join(""); $("#rel-more").href = `shop.html?s=${encodeURIComponent(p.s)}`; $("#rel-sec").hidden = false; }
+  const seen = store.get("cv_seen", []).filter((s) => s.id !== p.id && byId.has(s.id)).map((s) => byId.get(s.id));
+  if (seen.length) { $("#seen").innerHTML = seen.map(cardHtml).join(""); $("#seen-sec").hidden = false; }
+  rememberSeen(p);
+});
+function fmtN(n) { return (+n).toLocaleString("en-ZA").replace(/ /g, " "); }
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Delivery & help · Cloudside Vapor</title>
+<meta name="description" content="How ordering, delivery across South Africa, collection in Boksburg and payment work at Cloudside Vapor, plus answers to common questions.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0d0c0c">
+<link rel="icon" href="assets/img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;counter-reset:st}
+.step{counter-increment:st;padding:24px;border-radius:var(--r);background:var(--panel);border:1px solid var(--line)}
+.step::before{content:counter(st);display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:22px;margin-bottom:14px}
+.step h3{font-size:23px;text-transform:uppercase;margin-bottom:6px}
+.step p{color:var(--mute);font-size:14.5px}
+.ways{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.way{padding:26px;border-radius:var(--r);border:1px solid var(--paper-line);background:#fff}
+.way h3{font-size:26px;text-transform:uppercase;margin:10px 0 8px;color:var(--paper-ink)}
+.way p{color:var(--paper-mute);font-size:15px}
+.way svg{width:28px;height:28px;color:var(--red)}
+.way ul{margin:12px 0 0 18px;color:var(--paper-mute);font-size:14.5px;display:grid;gap:4px}
+.faq{display:grid;grid-template-columns:.7fr 1.3fr;gap:44px;align-items:start}
+.qa{border-top:1px solid var(--line)}
+.qa details{border-bottom:1px solid var(--line)}
+.qa summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:16px;padding:18px 2px;font-weight:600;font-size:16px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::after{content:"+";font-family:var(--head);font-size:28px;line-height:.8;color:var(--red-hi);transition:transform .25s}
+.qa details[open] summary::after{transform:rotate(45deg)}
+.qa details p{color:var(--mute);padding:0 2px 18px;max-width:62ch}
+.qa details p a{color:var(--ink)}
+@media (max-width:860px){.steps,.ways,.faq{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-page="help">
+<main id="main">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><span>Delivery &amp; help</span></nav>
+    <header class="phead"><span class="tag">Ordering made simple</span><h1 style="margin-top:12px">Delivery &amp; help</h1>
+      <p>How ordering works, what delivery and collection look like, and answers to the questions we get asked most.</p></header>
+  </div>
+
+  <section class="sec" style="padding-top:48px">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="tag">How to order</span><h2>Three steps</h2></div></div>
+      <div class="steps">
+        <div class="step"><h3>Fill your bag</h3><p>Browse the <a class="link" href="shop.html">shop</a> and add what you want. Everything listed is in stock.</p></div>
+        <div class="step"><h3>Send it on WhatsApp</h3><p>Open your bag, choose collect or deliver, and tap send. Your order arrives as a message to us.</p></div>
+        <div class="step"><h3>We confirm, you pay</h3><p>We check everything is packed, confirm the total (and delivery cost) and send you payment details. Then it's yours.</p></div>
+      </div>
+      <p class="muted" style="margin-top:16px;font-size:14px">In a rush? Every product page also has a <b style="color:var(--ink)">Buy now</b> button that takes you straight to our online checkout.</p>
+    </div>
+  </section>
+
+  <section class="sec paper">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="tag">Getting it to you</span><h2>Collect or deliver</h2></div></div>
+      <div class="ways">
+        <div class="way"><span data-i="pin"></span><h3>Collect in Boksburg</h3><p>Pick up from the shop at 0A Edel Road, Atlas Junction, once we've told you it's ready.</p>
+          <ul><li>No delivery fee</li><li>Bring your ID</li><li>Open 7 days a week</li></ul></div>
+        <div class="way"><span data-i="truck"></span><h3>Delivery across SA</h3><p>We deliver anywhere in South Africa. The cost depends on where you are, and we'll tell you before you pay.</p>
+          <ul><li>Delivery cost confirmed up front</li><li>ID checked on delivery (18+)</li><li>Updates on WhatsApp until it arrives</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="faq">
+    <div class="wrap faq">
+      <div><span class="tag">FAQs</span><h2 style="margin-top:10px">Good questions</h2><p class="muted" style="margin-top:12px">Can't find your answer? <a class="link" id="faq-wa" target="_blank" rel="noopener">Message us on WhatsApp</a> or call <a class="link" href="tel:+27849437805">+27 84 943 7805</a>.</p></div>
+      <div class="qa">
+        <details open><summary>Do you deliver outside Gauteng?</summary><p>Yes, anywhere in South Africa. Send your order on WhatsApp with your address and we'll confirm the delivery cost before you pay.</p></details>
+        <details><summary>How long does delivery take?</summary><p>It depends on where you are. We'll give you an estimate when we confirm your order and send tracking once it's on its way.</p></details>
+        <details><summary>Can I order online and collect in the shop?</summary><p>Yes. Choose "Collect in Boksburg" in your bag. We'll let you know on WhatsApp when it's packed and waiting for you at Atlas Junction.</p></details>
+        <details><summary>How do I pay?</summary><p>Use the <b>Buy now</b> button on a product to pay through our online checkout, or order on WhatsApp and we'll send you payment details once your order is confirmed. You can also pay in the shop when you collect.</p></details>
+        <details><summary>Is everything on the website really in stock?</summary><p>The website only lists products that are in stock on our stock list. Things do sell fast, so if something goes before we confirm your order, we'll tell you straight away and suggest something similar.</p></details>
+        <details><summary>Do I need to be 18?</summary><p>Yes. We only sell to adults and check ID in the shop, on collection and on delivery.</p></details>
+        <details><summary>Which coil or pod fits my device?</summary><p>Send us a photo of your device on WhatsApp and we'll tell you exactly what fits, and whether we have it in stock.</p></details>
+        <details><summary>My device stopped working. What now?</summary><p>Message us with your order details and what's happening. Warranty depends on the brand, but we'll help you sort it out.</p></details>
+        <details><summary>Do you sell hookah coals and accessories?</summary><p>Yes: coals, heads, hoses, tongs and more. Have a look in <a class="link" href="shop.html?c=hookah">Hookah</a>.</p></details>
+        <details><summary>Can you get a product you don't have?</summary><p>Often, yes. Tell us what you're after and we'll check with our suppliers.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="assets/site.js"></script>
+<script>
+$$("[data-i]").forEach((el) => (el.outerHTML = I[el.dataset.i]));
+$("#faq-wa").href = wa("Hi Cloudside, I have a question: ");
+</script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shop · Cloudside Vapor</title>
+<meta name="description" content="Everything in stock at Cloudside Vapor, Boksburg: disposables, pod kits, e-liquids, nic salts, coils, hookah pipes, shisha and snus. Filter by brand, flavour, puffs and price.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0d0c0c">
+<link rel="icon" href="assets/img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.layout{display:grid;grid-template-columns:260px 1fr;gap:32px;padding-block:28px 40px;align-items:start}
+.side{position:sticky;top:calc(var(--hdr) + 18px);max-height:calc(100vh - var(--hdr) - 36px);overflow:auto;padding-right:6px;display:grid;gap:22px;scrollbar-width:thin}
+.fg h4{font-family:var(--body);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+.fl{list-style:none;display:grid;gap:2px}
+.fl button{width:100%;display:flex;justify-content:space-between;gap:10px;padding:7px 10px;border-radius:8px;text-align:left;font-size:14px;color:var(--mute)}
+.fl button:hover{background:rgba(255,255,255,.05);color:var(--ink)}
+.fl button[aria-pressed="true"]{background:#fff;color:#111;font-weight:600}
+.fl button small{color:inherit;opacity:.7;font-variant-numeric:tabular-nums}
+.fl .sub button{padding-left:24px;font-size:13.5px}
+.bsearch{width:100%;margin-bottom:8px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13.5px;outline:0}
+.bsearch:focus{border-color:var(--red)}
+.more{font-size:13px;color:var(--mute);text-decoration:underline;padding:6px 10px}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pills button{padding:7px 12px;border-radius:999px;border:1px solid var(--line);font-size:13px;color:var(--mute)}
+.pills button:hover{border-color:#fff;color:var(--ink)}
+.pills button[aria-pressed="true"]{background:#fff;color:#111;border-color:#fff;font-weight:600}
+.range{display:flex;gap:8px;align-items:center}
+.range input{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:14px;outline:0}
+.range input:focus{border-color:var(--red)}
+.tog{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--mute);cursor:pointer;padding:4px 0}
+.tog input{accent-color:var(--red);width:17px;height:17px}
+
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.bar h1{font-size:clamp(34px,5vw,54px)}
+.bar .cnt{color:var(--mute);font-size:14px;margin-top:4px}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sq{display:flex;align-items:center;gap:8px;height:42px;padding:0 14px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);min-width:220px}
+.sq:focus-within{border-color:var(--red)}
+.sq svg{width:16px;color:var(--dim)}
+.sq input{background:none;border:0;outline:0;width:100%;font-size:14px}
+.sort{height:42px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);padding:0 14px;font-size:14px;outline:0}
+.ffbtn{display:none}
+.active{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.active button{display:inline-flex;gap:6px;align-items:center;padding:6px 8px 6px 12px;border-radius:999px;background:var(--red-soft);border:1px solid rgba(227,16,31,.4);font-size:13px}
+.active button svg{width:13px;height:13px}
+.active .clear{background:none;border:0;text-decoration:underline;color:var(--mute)}
+.loadmore{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:28px;color:var(--mute);font-size:14px}
+.none{grid-column:1/-1;padding:60px 20px;text-align:center;border:1px dashed var(--line);border-radius:var(--r);display:grid;gap:10px;justify-items:center}
+.none b{font-size:18px}
+.side-head{display:none}
+.skel{aspect-ratio:.72;border-radius:var(--r);background:linear-gradient(90deg,var(--panel) 30%,var(--panel2) 50%,var(--panel) 70%);background-size:300% 100%;animation:sk 1.2s infinite}
+@keyframes sk{to{background-position:-100% 0}}
+
+@media (max-width:960px){
+  .layout{grid-template-columns:1fr}
+  .side{position:fixed;inset:0 auto 0 0;z-index:100;width:min(340px,88%);max-height:none;background:#121010;border-right:1px solid var(--line);padding:calc(16px + env(safe-area-inset-top,0px)) 18px calc(90px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px));transform:translateX(-105%);transition:transform .4s var(--ease)}
+  .side.on{transform:none}
+  .side-head{display:flex;justify-content:space-between;align-items:center}
+  .side-head h3{font-size:28px;text-transform:uppercase}
+  .side-done{position:fixed;left:0;bottom:0;width:min(340px,88%);padding:14px 18px calc(14px + env(safe-area-inset-bottom,0px));background:#121010;border-top:1px solid var(--line);transform:translateX(-105%);transition:transform .4s var(--ease);z-index:101}
+  .side.on+.side-done{transform:none}
+  .side-done .btn{width:100%}
+  .ffbtn{display:inline-flex}
+  .sq{min-width:0;flex:1 1 100%;order:-1}
+  .sort{flex:1}
+  .tools{width:100%}
+}
+@media (min-width:961px){.side-done{display:none}}
+</style>
+</head>
+<body data-page="shop">
+<main id="main" class="wrap">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><span id="crumb">Shop</span></nav>
+  <div class="layout">
+    <aside class="side" id="side" aria-label="Filters">
+      <div class="side-head"><h3>Filters</h3><button class="x" id="side-x" aria-label="Close filters"></button></div>
+      <div class="fg"><h4>Category</h4><ul class="fl" id="f-cat"></ul></div>
+      <div class="fg"><h4>Flavour</h4><div class="pills" id="f-flav"></div></div>
+      <div class="fg" id="g-puffs"><h4>Puffs (disposables)</h4><div class="pills" id="f-puffs"></div></div>
+      <div class="fg"><h4>Price</h4>
+        <div class="range"><label class="sr" for="pmin">Minimum price</label><input id="pmin" type="number" inputmode="numeric" min="0" placeholder="R min"><span class="muted">to</span><label class="sr" for="pmax">Maximum price</label><input id="pmax" type="number" inputmode="numeric" min="0" placeholder="R max"></div>
+        <div class="pills" id="f-price" style="margin-top:8px"></div></div>
+      <div class="fg"><h4>Brand</h4><label class="sr" for="bq">Find a brand</label><input class="bsearch" id="bq" placeholder="Find a brand"><ul class="fl" id="f-brand"></ul></div>
+      <div class="fg"><h4>Show</h4>
+        <label class="tog"><input type="checkbox" id="t-new"> New arrivals only</label>
+        <label class="tog"><input type="checkbox" id="t-photo"> Only items with photos</label></div>
+    </aside>
+    <div class="side-done"><button class="btn btn-red" id="side-done">Show results</button></div>
+
+    <section aria-labelledby="ttl">
+      <div class="bar">
+        <div><h1 id="ttl">Everything in stock</h1><p class="cnt" id="cnt">Loading the shelf…</p></div>
+        <div class="tools">
+          <button class="btn btn-line btn-sm ffbtn" id="ffbtn">Filters</button>
+          <label class="sq"><span class="sr">Search the shop</span><span id="sq-ic"></span><input id="q" type="search" placeholder="Search, e.g. Elf Bar watermelon"></label>
+          <label class="sr" for="sort">Sort by</label>
+          <select class="sort" id="sort"><option value="rec">Recommended</option><option value="lo">Price: low to high</option><option value="hi">Price: high to low</option><option value="az">Name: A to Z</option><option value="puffs">Most puffs</option></select>
+        </div>
+      </div>
+      <div class="active" id="active"></div>
+      <div class="grid" id="grid"></div>
+      <div class="loadmore" id="more"></div>
+    </section>
+  </div>
+</main>
+<script src="assets/site.js"></script>
+<script>
+$("#grid").innerHTML = "<div class='skel'></div>".repeat(8);
+$("#sq-ic").outerHTML = I.search;
+$("#side-x").innerHTML = I.x;
+
+const PAGE = 36;
+const SUBS = { vape: ["Disposables", "Devices", "Nic Salts", "E Liquids", "Coils, Pods & Tanks", "MTL", "Vape Accessories", "Batteries & Chargers", "Other"], hookah: ["Hookah Pipes", "Hookah Flavour", "Coal", "Heads", "Hookah Accessories"], snus: ["Snus"] };
+const MAIN = { vape: "Vape", hookah: "Hookah", snus: "Snus" };
+const SUBNAME = { "E Liquids": "E-liquids", "Nic Salts": "Nic salts", "Devices": "Pod kits & devices", "Hookah Flavour": "Shisha flavours", "Coal": "Coals" };
+const PUFFS = [["u5", "Under 5k", 0, 4999], ["5-10", "5k–10k", 5000, 10000], ["10-20", "10k–20k", 10001, 20000], ["20", "20k+", 20001, 1e9]];
+const PRICES = [[0, 150, "Under R150"], [150, 300, "R150–R300"], [300, 600, "R300–R600"], [600, 0, "R600+"]];
+const puffN = (p) => { const n = parseFloat(p.puffs) || 0; return n < 100 ? n * 1000 : n; }; // "20k puffs" is stored as 20
+
+const url = new URLSearchParams(location.search);
+const st = { c: url.get("c") || "", s: url.get("s") || "", b: url.get("b") || "", q: url.get("q") || "", f: url.get("f") || "", pf: url.get("pf") || "",
+  min: +url.get("min") || 0, max: +url.get("max") || 0, new: url.get("new") === "1", photo: url.get("photo") === "1", sort: url.get("sort") || "rec" };
+if (st.s && !st.c) st.c = Object.keys(SUBS).find((k) => SUBS[k].includes(st.s)) || "";
+let shown = PAGE, brandAll = false, ALL = [];
+
+function matches(p, skip = "") {
+  if (skip !== "cat" && st.c && p.c !== st.c) return false;
+  if (skip !== "cat" && st.s && p.s !== st.s) return false;
+  if (skip !== "b" && st.b && p.b !== st.b) return false;
+  if (skip !== "f" && st.f && !FLAVOURS[st.f]?.re.test(p.n)) return false;
+  if (skip !== "pf" && st.pf) { const r = PUFFS.find((x) => x[0] === st.pf), n = puffN(p); if (!r || !n || n < r[2] || n > r[3]) return false; }
+  if (st.min && (!p.p || p.p < st.min)) return false;
+  if (st.max && (!p.p || p.p > st.max)) return false;
+  if (st.new && !p.new) return false;
+  if (st.photo && !p.t) return false;
+  if (st.q) { const hay = (p.n + " " + p.b + " " + p.s).toLowerCase(); if (!st.q.toLowerCase().split(/\s+/).every((w) => hay.includes(w))) return false; }
+  return true;
+}
+const count = (list, fn) => list.reduce((m, p) => { const k = fn(p); if (k) m[k] = (m[k] || 0) + 1; return m; }, {});
+const fmt = (n) => n.toLocaleString("en-ZA").replace(/ /g, " ");
+
+function sync() {
+  const u = new URLSearchParams();
+  ["c", "s", "b", "q", "f", "pf"].forEach((k) => st[k] && u.set(k, st[k]));
+  st.min && u.set("min", st.min); st.max && u.set("max", st.max); st.new && u.set("new", 1); st.photo && u.set("photo", 1); st.sort !== "rec" && u.set("sort", st.sort);
+  history.replaceState(null, "", "shop.html" + (u.toString() ? "?" + u : ""));
+}
+
+function render(keepPage) {
+  if (!keepPage) shown = PAGE;
+  sync();
+  // categories (counts ignore the category filter so you can switch)
+  const forCat = ALL.filter((p) => matches(p, "cat")), cc = count(forCat, (p) => p.c), sc = count(forCat, (p) => p.s);
+  $("#f-cat").innerHTML = `<li><button data-cat="" aria-pressed="${!st.c}">All products <small>${fmt(forCat.length)}</small></button></li>` +
+    Object.keys(SUBS).map((c) => `<li><button data-cat="${c}" aria-pressed="${st.c === c && !st.s}">${MAIN[c]} <small>${fmt(cc[c] || 0)}</small></button></li>` +
+      (st.c === c ? SUBS[c].filter((s) => sc[s]).map((s) => `<li class="sub"><button data-cat="${c}" data-sub="${esc(s)}" aria-pressed="${st.s === s}">${SUBNAME[s] || s} <small>${fmt(sc[s])}</small></button></li>`).join("") : "")).join("");
+  // flavour
+  const forF = ALL.filter((p) => matches(p, "f"));
+  $("#f-flav").innerHTML = Object.entries(FLAVOURS).map(([k, v]) => `<button data-flav="${k}" aria-pressed="${st.f === k}">${v.label} (${fmt(forF.filter((p) => v.re.test(p.n)).length)})</button>`).join("");
+  // puffs only matters for disposables
+  $("#g-puffs").hidden = !(st.s === "Disposables" || (!st.s && st.c !== "hookah" && st.c !== "snus"));
+  $("#f-puffs").innerHTML = PUFFS.map(([k, l]) => `<button data-pf="${k}" aria-pressed="${st.pf === k}">${l}</button>`).join("");
+  $("#f-price").innerHTML = PRICES.map(([a, b, l]) => `<button data-pr="${a}-${b}" aria-pressed="${st.min === a && st.max === b && (a || b)}">${l}</button>`).join("");
+  $("#pmin").value = st.min || ""; $("#pmax").value = st.max || "";
+  $("#t-new").checked = st.new; $("#t-photo").checked = st.photo;
+  // brands
+  const bq = $("#bq").value.trim().toLowerCase();
+  const bc = Object.entries(count(ALL.filter((p) => matches(p, "b")), (p) => p.b)).sort((a, b) => b[1] - a[1]).filter(([b]) => !bq || b.toLowerCase().includes(bq));
+  const blist = brandAll || bq ? bc : bc.slice(0, 12);
+  $("#f-brand").innerHTML = (st.b ? `<li><button data-brand="" aria-pressed="false">All brands</button></li>` : "") +
+    blist.map(([b, n]) => `<li><button data-brand="${esc(b)}" aria-pressed="${st.b === b}">${esc(b)} <small>${fmt(n)}</small></button></li>`).join("") +
+    (!bq && bc.length > 12 ? `<li><button class="more" id="bmore">${brandAll ? "Show fewer" : `Show all ${bc.length} brands`}</button></li>` : "") +
+    (!blist.length ? `<li class="muted" style="font-size:13px;padding:6px 10px">No brand matches "${esc(bq)}"</li>` : "");
+
+  // results
+  let list = ALL.filter((p) => matches(p));
+  const by = { rec: (a, b) => (b.new - a.new) || (!!b.t - !!a.t), lo: (a, b) => (a.p || 1e9) - (b.p || 1e9), hi: (a, b) => b.p - a.p, az: (a, b) => a.n.localeCompare(b.n), puffs: (a, b) => puffN(b) - puffN(a) };
+  list = list.sort(by[st.sort] || by.rec);
+  const title = st.s ? (SUBNAME[st.s] || st.s) : st.c ? MAIN[st.c] : st.b ? st.b : st.new ? "New arrivals" : "Everything in stock";
+  $("#ttl").textContent = st.q ? `Results for "${st.q}"` : title;
+  $("#crumb").textContent = title;
+  document.title = `${st.q ? st.q : title} · Cloudside Vapor`;
+  $("#cnt").textContent = `${fmt(list.length)} product${list.length === 1 ? "" : "s"} in stock`;
+  $("#grid").innerHTML = list.length ? list.slice(0, shown).map(cardHtml).join("")
+    : `<div class="none"><b>Nothing matches those filters</b><span class="muted">It might still be in the shop. Clear a filter, or ask us.</span>
+       <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><button class="btn btn-white btn-sm" data-clear>Clear all filters</button><a class="btn btn-wa btn-sm" target="_blank" rel="noopener" href="${wa("Hi Cloudside, do you have " + (st.q || title) + "?")}">Ask on WhatsApp</a></div></div>`;
+  $("#more").innerHTML = list.length > shown ? `<span>Showing ${fmt(shown)} of ${fmt(list.length)}</span><button class="btn btn-line" id="loadmore">Show ${Math.min(PAGE, list.length - shown)} more</button>` : list.length > PAGE ? `<span>That's all ${fmt(list.length)}.</span>` : "";
+
+  // active filter chips
+  const chips = [];
+  if (st.c) chips.push(["c", st.s ? SUBNAME[st.s] || st.s : MAIN[st.c]]);
+  if (st.b) chips.push(["b", st.b]);
+  if (st.f) chips.push(["f", FLAVOURS[st.f].label]);
+  if (st.pf) chips.push(["pf", PUFFS.find((x) => x[0] === st.pf)[1] + " puffs"]);
+  if (st.min || st.max) chips.push(["price", st.min && st.max ? `${R(st.min)}–${R(st.max)}` : st.min ? `From ${R(st.min)}` : `Up to ${R(st.max)}`]);
+  if (st.new) chips.push(["new", "New arrivals"]);
+  if (st.photo) chips.push(["photo", "With photos"]);
+  if (st.q) chips.push(["q", `"${st.q}"`]);
+  $("#active").innerHTML = chips.map(([k, l]) => `<button data-unset="${k}">${esc(l)} ${I.x}</button>`).join("") + (chips.length > 1 ? `<button class="clear" data-clear>Clear all</button>` : "");
+}
+
+document.addEventListener("click", (e) => {
+  const t = e.target.closest("[data-cat],[data-flav],[data-pf],[data-pr],[data-brand],[data-unset],[data-clear],#bmore,#loadmore,#ffbtn,#side-x,#side-done");
+  if (!t) return;
+  if (t.id === "loadmore") { shown += PAGE; render(true); return; }
+  if (t.id === "bmore") { brandAll = !brandAll; render(true); return; }
+  if (t.id === "ffbtn") { $("#side").classList.add("on"); document.body.classList.add("lock"); return; }
+  if (t.id === "side-x" || t.id === "side-done") { $("#side").classList.remove("on"); document.body.classList.remove("lock"); return; }
+  if (t.dataset.cat !== undefined) { st.c = t.dataset.cat; st.s = t.dataset.sub || ""; if (st.s !== "Disposables" && st.c !== "vape") st.pf = ""; }
+  else if (t.dataset.flav) st.f = st.f === t.dataset.flav ? "" : t.dataset.flav;
+  else if (t.dataset.pf) st.pf = st.pf === t.dataset.pf ? "" : t.dataset.pf;
+  else if (t.dataset.pr) { const [a, b] = t.dataset.pr.split("-").map(Number); const on = st.min === a && st.max === b; st.min = on ? 0 : a; st.max = on ? 0 : b; }
+  else if (t.dataset.brand !== undefined) st.b = t.dataset.brand;
+  else if (t.dataset.unset) { const k = t.dataset.unset; if (k === "c") { st.c = st.s = ""; } else if (k === "price") { st.min = st.max = 0; } else if (k === "q") { st.q = ""; $("#q").value = ""; } else st[k] = typeof st[k] === "boolean" ? false : ""; }
+  else if (t.hasAttribute("data-clear")) { Object.assign(st, { c: "", s: "", b: "", q: "", f: "", pf: "", min: 0, max: 0, new: false, photo: false }); $("#q").value = ""; }
+  render();
+  if (innerWidth > 960) scrollTo({ top: 0, behavior: "smooth" });
+});
+let qt;
+$("#q").addEventListener("input", (e) => { clearTimeout(qt); qt = setTimeout(() => { st.q = e.target.value.trim(); render(); }, 180); });
+$("#bq").addEventListener("input", () => render(true));
+$("#sort").addEventListener("change", (e) => { st.sort = e.target.value; render(); });
+["#pmin", "#pmax"].forEach((s) => $(s).addEventListener("change", () => { st.min = Math.max(0, +$("#pmin").value || 0); st.max = Math.max(0, +$("#pmax").value || 0); render(); }));
+$("#t-new").addEventListener("change", (e) => { st.new = e.target.checked; render(); });
+$("#t-photo").addEventListener("change", (e) => { st.photo = e.target.checked; render(); });
+
+$("#q").value = st.q; $("#sort").value = st.sort;
+const hq = $("#hq"); if (hq) hq.value = st.q;
+loadProducts().then((all) => { ALL = all; render(); }).catch(() => { $("#cnt").textContent = "Couldn't load the products. Refresh the page to try again."; });
+</script>
+</body>
+</html>

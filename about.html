@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>About us · Cloudside Vapor</title>
+<meta name="description" content="Cloudside Vapor is a vape, hookah and tobacco shop at Atlas Junction, Boksburg, with delivery across South Africa.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0d0c0c">
+<link rel="icon" href="assets/img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.story{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+.story p{font-size:17px;color:var(--paper-mute);max-width:56ch}
+.story p+p{margin-top:16px}
+.story p b{color:var(--paper-ink)}
+.story figure img{border-radius:16px;width:100%}
+.story figcaption{font-size:13px;color:var(--paper-mute);margin-top:8px}
+.stock{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.stock a{padding:22px 20px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .2s}
+.stock a:hover{background:var(--panel)}
+.stock b{display:block;font-family:var(--head);font-size:46px;line-height:1;font-variant-numeric:tabular-nums}
+.stock span{color:var(--mute);font-size:14px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.rules h3{font-size:24px;text-transform:uppercase;margin-bottom:8px}
+.rules p{color:var(--mute);font-size:15px}
+.gallery{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px}
+.gallery img{border-radius:14px;width:100%;height:100%;object-fit:cover;aspect-ratio:4/5}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+@media (max-width:900px){.story{grid-template-columns:1fr}.stock{grid-template-columns:repeat(2,1fr)}.rules{grid-template-columns:1fr}.gallery{grid-template-columns:1fr 1fr}.gallery img:first-child{grid-column:1/-1;aspect-ratio:1}}
+</style>
+</head>
+<body data-page="about">
+<main id="main">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><span>About us</span></nav>
+    <header class="phead"><span class="tag">About Cloudside</span><h1 style="margin-top:12px">A proper shop, not just a website</h1>
+      <p>We're a vape, hookah and tobacco shop on Atlas Road in Boksburg. You can walk in, and you can also order from anywhere in the country.</p></header>
+  </div>
+
+  <section class="sec paper" style="margin-top:48px">
+    <div class="wrap story">
+      <div>
+        <span class="tag">Who we are</span>
+        <h2 style="margin:12px 0 22px">Atlas Junction, Boksburg</h2>
+        <p>Cloudside Vapor is at <b>0A Edel Road in Atlas Junction</b>. Walk in and you'll see hookah pipes along the top shelf, a whole wall of disposables, and rows of 100ml and 120ml juices from local and international brands.</p>
+        <p>We keep a wide range because people vape differently. Some want a disposable they can grab and go. Others are building a tank setup, and plenty just want their usual shisha flavour and a box of coals for the weekend.</p>
+        <p>Everything on the shelf is also on this website, and <b>we deliver anywhere in South Africa</b>. If you're not sure what to get, message us. You'll talk to someone who works in the shop.</p>
+        <div class="cta"><a class="btn btn-red" href="shop.html">See what's in stock</a><a class="btn btn-line" href="visit.html">Visit the shop</a></div>
+      </div>
+      <figure><img src="assets/img/shopfront.webp" alt="The Cloudside Vapor shopfront" width="600" height="583" loading="lazy"><figcaption>The shopfront at Atlas Junction.</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="tag">On the shelf today</span><h2>What we stock</h2></div><p>Live counts from our stock list. Tap any of them to browse.</p></div>
+      <div class="stock" id="stock"></div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="tag">How we work</span><h2>A few house rules</h2></div></div>
+      <div class="rules">
+        <div class="rv"><h3>Strictly 18+</h3><p>We sell nicotine, so we ask for ID in the shop, on collection and on delivery. No exceptions, even if we know you.</p></div>
+        <div class="rv"><h3>Only real stock online</h3><p>If something sells out, it comes off the website. You won't order something and then wait a week to hear it's gone.</p></div>
+        <div class="rv"><h3>Ask before you buy</h3><p>Not sure a pod fits your device, or what nicotine strength to start on? Send us a photo or a question on WhatsApp first.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="gallery">
+        <img src="assets/img/disposables.webp" alt="Disposables wall: Elf Bar, Dragbar, Artery, Vozol and more" width="600" height="795" loading="lazy">
+        <img src="assets/img/eliquids.webp" alt="Rows of e-liquid bottles" width="600" height="685" loading="lazy">
+        <img src="assets/img/interior.webp" alt="Hookah pipes on display inside the shop" width="600" height="337" loading="lazy">
+      </div>
+    </div>
+  </section>
+</main>
+<script src="assets/site.js"></script>
+<script>
+loadProducts().then((all) => {
+  const fmt = (n) => n.toLocaleString("en-ZA").replace(/ /g, " ");
+  const n = (fn) => fmt(all.filter(fn).length);
+  const brands = new Set(all.map((p) => p.b).filter(Boolean)).size;
+  $("#stock").innerHTML = [
+    [n(() => true), "products in stock", "shop.html"],
+    [brands, "brands", "shop.html"],
+    [n((p) => p.s === "Disposables"), "disposables", "shop.html?s=Disposables"],
+    [n((p) => p.s === "Nic Salts" || p.s === "E Liquids"), "juices & nic salts", "shop.html?c=vape"],
+    [n((p) => p.s === "Devices"), "pod kits & devices", "shop.html?s=Devices"],
+    [n((p) => p.s === "Coils, Pods & Tanks"), "coils, pods & tanks", "shop.html?s=Coils%2C+Pods+%26+Tanks"],
+    [n((p) => p.s === "Hookah Pipes"), "hookah pipes", "shop.html?s=Hookah+Pipes"],
+    [n((p) => p.s === "Hookah Flavour"), "shisha flavours", "shop.html?s=Hookah+Flavour"]
+  ].map(([v, l, h]) => `<a href="${h}"><b>${v}</b><span>${l}</span></a>`).join("");
+});
+</script>
+</body>
+</html>

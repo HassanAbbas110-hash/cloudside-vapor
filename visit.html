@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Visit the shop · Cloudside Vapor</title>
+<meta name="description" content="Find Cloudside Vapor at 0A Edel Road, Atlas Junction (Atlas Road), Boksburg 1523. Open 7 days. Call, WhatsApp or email us.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0d0c0c">
+<link rel="icon" href="assets/img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.vgrid{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;padding-block:36px 20px}
+.map{position:relative;min-height:440px;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:var(--panel)}
+.map iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:grayscale(.85) invert(.9) hue-rotate(180deg) contrast(.95)}
+.card2{border-radius:18px;background:var(--panel);border:1px solid var(--line);padding:clamp(22px,3vw,34px);display:grid;gap:22px;align-content:start}
+.row{display:flex;gap:14px;align-items:flex-start}
+.row .ic{width:44px;height:44px;border-radius:12px;background:var(--red-soft);color:var(--red-hi);display:grid;place-items:center;flex:none}
+.row .ic svg{width:20px;height:20px}
+.row small{display:block;font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.row b{font-size:17px;font-weight:600}
+.row p{color:var(--mute);font-size:14px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.copyb{font-size:12.5px;color:var(--mute);text-decoration:underline;margin-left:6px}
+.contact{display:grid;grid-template-columns:.8fr 1.2fr;gap:44px;align-items:start}
+.contact form{display:grid;gap:14px;padding:clamp(22px,3vw,32px);border-radius:18px;background:#fff;color:#111}
+.contact .field label{color:#6b625c}
+.contact .field input,.contact .field textarea,.contact .field select{background:#f4f0ec;border-color:#e2dad2;color:#111}
+.contact .field input:focus,.contact .field textarea:focus{border-color:var(--red)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ways{display:grid;gap:10px;margin-top:22px}
+.ways a{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;border:1px solid var(--line);font-weight:600;transition:border-color .2s}
+.ways a:hover{border-color:var(--red)}
+.ways svg{width:20px;height:20px;color:var(--red-hi)}
+@media (max-width:900px){.vgrid,.contact{grid-template-columns:1fr}.map{min-height:320px}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-page="visit">
+<main id="main">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><span>Visit the shop</span></nav>
+    <header class="phead"><span class="tag">Come through</span><h1 style="margin-top:12px">Visit the shop</h1>
+      <p>We're at Atlas Junction on Atlas Road, Boksburg. Pop in to browse, collect an order, or get help setting up a device.</p></header>
+
+    <div class="vgrid">
+      <div class="map"><iframe id="map" title="Map showing Cloudside Vapor at Atlas Junction, Boksburg" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+      <div class="card2">
+        <div class="row"><div class="ic" data-i="pin"></div><div><small>Address</small><b>0A Edel Road, Atlas Junction</b><p>Atlas Road, Boksburg, 1523 <button class="copyb" id="copy-addr">Copy</button></p></div></div>
+        <div class="row"><div class="ic" data-i="clock"></div><div><small>Trading hours</small><b>Open 7 days a week</b><p>Hours can change on public holidays. Call or WhatsApp us to check before a long drive.</p></div></div>
+        <div class="row"><div class="ic" data-i="phone"></div><div><small>Phone &amp; WhatsApp</small><b><a href="tel:+27849437805">+27 84 943 7805</a></b></div></div>
+        <div class="row"><div class="ic" data-i="mail"></div><div><small>Email</small><b><a href="mailto:cloudsidevapor@gmail.com">cloudsidevapor@gmail.com</a></b></div></div>
+        <div class="btns"><a class="btn btn-red" id="dir" target="_blank" rel="noopener">Get directions</a><a class="btn btn-wa" id="wa-here" target="_blank" rel="noopener">WhatsApp us</a></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="sec">
+    <div class="wrap contact">
+      <div>
+        <span class="tag">Get in touch</span>
+        <h2 style="margin-top:10px">Ask us anything</h2>
+        <p class="muted" style="margin-top:12px">Stock questions, a special order, help with a device or a bulk order for an event. Fill this in and it opens WhatsApp with your message ready to send. Or reach us directly:</p>
+        <div class="ways">
+          <a href="tel:+27849437805"><span data-i="phone"></span>Call +27 84 943 7805</a>
+          <a href="mailto:cloudsidevapor@gmail.com"><span data-i="mail"></span>cloudsidevapor@gmail.com</a>
+        </div>
+      </div>
+      <form id="cform" novalidate>
+        <div class="two">
+          <div class="field"><label for="cf-name">Your name</label><input id="cf-name" autocomplete="name" required></div>
+          <div class="field"><label for="cf-topic">What's it about?</label>
+            <select id="cf-topic"><option>A product or stock question</option><option>An order I placed</option><option>Help with my device</option><option>Bulk or event order</option><option>Something else</option></select></div>
+        </div>
+        <div class="field"><label for="cf-msg">Message</label><textarea id="cf-msg" rows="5" required placeholder="e.g. Do you have the Oxva Xlim Pro 2 in black?"></textarea></div>
+        <button class="btn btn-wa" type="submit"><span data-i="wa"></span> Send on WhatsApp</button>
+        <p style="font-size:12.5px;color:#6b625c">This opens WhatsApp on your phone or computer. Nothing is sent until you press send there.</p>
+      </form>
+    </div>
+  </section>
+</main>
+<script src="assets/site.js"></script>
+<script>
+$$("[data-i]").forEach((el) => { if (el.classList.contains("ic")) el.innerHTML = I[el.dataset.i]; else el.outerHTML = I[el.dataset.i]; });
+$("#map").src = "https://maps.google.com/maps?q=" + encodeURIComponent(CONFIG.mapsQuery) + "&z=15&output=embed";
+$("#dir").href = mapsLink;
+$("#wa-here").href = wa("Hi Cloudside!");
+$("#copy-addr").onclick = async () => { try { await navigator.clipboard.writeText(CONFIG.address.join(", ")); toast("Address copied"); } catch { toast(CONFIG.address.join(", ")); } };
+$("#cf-name").value = store.get("cv_name", "");
+$("#cform").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = $("#cf-name"), msg = $("#cf-msg");
+  if (!name.value.trim()) { name.classList.add("bad"); name.focus(); toast("Add your name first"); return; }
+  if (!msg.value.trim()) { msg.classList.add("bad"); msg.focus(); toast("Write a short message first"); return; }
+  store.set("cv_name", name.value.trim());
+  window.open(wa(`Hi Cloudside, it's ${name.value.trim()}.\nTopic: ${$("#cf-topic").value}\n\n${msg.value.trim()}`), "_blank", "noopener");
+});
+</script>
+</body>
+</html>
