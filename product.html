@@ -42,6 +42,11 @@
 .box b{color:var(--ink);font-weight:600}
 .desc{color:var(--mute);font-size:15px;max-width:62ch}
 .desc h2{font-size:22px;color:var(--ink);margin-bottom:8px}
+.fits{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.fits small{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-right:4px}
+.fits a{font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px;border:1px solid var(--line);transition:all .2s}
+.fits a:hover{border-color:var(--red);color:#fff;background:var(--red-soft)}
+.fits a.ask{border-style:dashed;color:var(--mute)}
 .share{font-size:13.5px;color:var(--mute);text-decoration:underline;justify-self:start}
 .nf{padding:80px 0;text-align:center;display:grid;gap:14px;justify-items:center}
 @media (max-width:860px){.pd{grid-template-columns:1fr;gap:24px}.pic{position:static}}
@@ -49,11 +54,13 @@
 </head>
 <body data-page="shop">
 <script src="assets/site.js"></script>
+<script src="assets/fits.js"></script>
 <main id="main">
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span><a href="shop.html">Shop</a><span>/</span><a id="c-sub" href="shop.html">…</a></nav>
     <div id="pd"><div class="pd"><div class="pic"></div><div class="info"><p class="muted">Loading…</p></div></div></div>
   </div>
+  <section class="sec" id="fit-sec" hidden style="padding-top:10px"><div class="wrap"><div class="sec-head"><div><span class="tag">Made for this device</span><h2 style="font-size:36px">Coils &amp; pods that <span class="script">fit</span></h2></div><a class="btn btn-line btn-sm" id="fit-more">Open the Coil &amp; Pod Finder</a></div><div class="rail" id="fit-rail"></div></div></section>
   <section class="sec" id="rel-sec" hidden style="padding-top:20px"><div class="wrap"><div class="sec-head"><h2 style="font-size:36px">You might also like</h2><a class="btn btn-line btn-sm" id="rel-more" href="shop.html">See more</a></div><div class="rail" id="rel"></div></div></section>
   <section class="sec" id="seen-sec" hidden style="padding-top:0"><div class="wrap"><div class="sec-head"><h2 style="font-size:36px">Recently viewed</h2></div><div class="rail" id="seen"></div></div></section>
 </main>
@@ -119,6 +126,14 @@ Promise.all([loadProducts(), loadDetail(id)]).then(([all, det]) => {
   if (rel.length) { $("#rel").innerHTML = rel.map(cardHtml).join(""); $("#rel-more").href = `shop.html?s=${encodeURIComponent(p.s)}`; $("#rel-sec").hidden = false; }
   const seen = store.get("cv_seen", []).filter((s) => s.id !== p.id && byId.has(s.id)).map((s) => byId.get(s.id));
   if (seen.length) { $("#seen").innerHTML = seen.map(cardHtml).join(""); $("#seen-sec").hidden = false; }
+  // coil finder links
+  const fam = familyOfDevice(p);
+  if (fam) {
+    const parts = fitsFor(fam, all);
+    if (parts.length) { $("#fit-rail").innerHTML = parts.map(cardHtml).join(""); $("#fit-more").href = "fit.html?d=" + fam.id; $("#fit-sec").hidden = false; }
+  }
+  const fams = familiesForCoil(p);
+  if (fams.length) $(".specs").insertAdjacentHTML("afterend", `<div class="fits"><small>Fits</small>${fams.map((f) => `<a href="fit.html?d=${f.id}">${esc(f.name.replace(/\s*\(.*\)/, ""))}</a>`).join("")}<a class="ask" href="${wa("Hi Cloudside, will " + p.n + " fit my device?")}" target="_blank" rel="noopener">Check with us</a></div>`);
   rememberSeen(p);
 });
 function fmtN(n) { return (+n).toLocaleString("en-ZA").replace(/ /g, " "); }

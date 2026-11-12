@@ -185,7 +185,7 @@ function toast(text, action, fn) {
 // top runs while the page is still parsing (script sits at the start of <body>), so nothing shifts
 function chromeTop() {
   const page = document.body.dataset.page;
-  const nav = [["shop.html", "Shop", "shop"], ["shop.html?c=vape", "Vape", ""], ["shop.html?c=hookah", "Hookah", ""], ["about.html", "About us", "about"], ["visit.html", "Visit the shop", "visit"], ["help.html", "Delivery & help", "help"]];
+  const nav = [["shop.html", "Shop", "shop"], ["shop.html?c=vape", "Vape", ""], ["shop.html?c=hookah", "Hookah", ""], ["fit.html", "Coil finder", "fit"], ["about.html", "About us", "about"], ["visit.html", "Visit the shop", "visit"], ["help.html", "Delivery & help", "help"]];
   const navLinks = nav.map(([h, t, k]) => `<a href="${h}"${k && k === page ? ' aria-current="page"' : ""}>${t}</a>`).join("");
   document.body.insertAdjacentHTML("afterbegin", `
   <a class="sr" href="#main">Skip to content</a>
@@ -213,7 +213,7 @@ function chromeBottom() {
     <div class="ftr-grid">
       <div><a class="logo" href="index.html"><img src="assets/img/logo-sm.webp" alt="Cloudside Vapor" width="180" height="121" loading="lazy"></a>
         <p>Vape, hookah and snus at Atlas Junction in Boksburg, with delivery anywhere in South Africa.</p></div>
-      <div><h4>Shop</h4><ul><li><a href="shop.html?s=Disposables">Disposables</a></li><li><a href="shop.html?s=Devices">Devices &amp; pod kits</a></li><li><a href="shop.html?s=E+Liquids">E-liquids</a></li><li><a href="shop.html?s=Nic+Salts">Nic salts</a></li><li><a href="shop.html?c=hookah">Hookah</a></li><li><a href="shop.html?c=snus">Snus</a></li></ul></div>
+      <div><h4>Shop</h4><ul><li><a href="shop.html?s=Disposables">Disposables</a></li><li><a href="shop.html?s=Devices">Devices &amp; pod kits</a></li><li><a href="shop.html?s=E+Liquids">E-liquids</a></li><li><a href="shop.html?s=Nic+Salts">Nic salts</a></li><li><a href="shop.html?c=hookah">Hookah</a></li><li><a href="shop.html?c=snus">Snus</a></li><li><a href="fit.html">Coil &amp; pod finder</a></li></ul></div>
       <div><h4>Cloudside</h4><ul><li><a href="about.html">About us</a></li><li><a href="visit.html">Visit the shop</a></li><li><a href="help.html">Delivery &amp; help</a></li><li><a href="help.html#faq">FAQs</a></li></ul></div>
       <div><h4>Talk to us</h4><ul><li><a href="tel:${CONFIG.phone.replace(/\s/g, "")}">${CONFIG.phone}</a></li><li><a href="${wa("Hi Cloudside!")}" target="_blank" rel="noopener">WhatsApp us</a></li><li><a href="mailto:${CONFIG.email}">${CONFIG.email}</a></li><li><a href="${mapsLink}" target="_blank" rel="noopener">${CONFIG.address[0]}, ${CONFIG.address[2]}</a></li></ul></div>
     </div>

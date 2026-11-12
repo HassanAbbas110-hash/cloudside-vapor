@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coil & Pod Finder · Cloudside Vapor</title>
+<meta name="description" content="Pick your device and see the coils, pods and juices that fit it, in stock at Cloudside Vapor, Boksburg. Order on WhatsApp or add to your bag.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0d0c0c">
+<link rel="icon" href="assets/img/icon.png">
+<link rel="preload" href="assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.fhero{position:relative;overflow:hidden;border-bottom:1px solid var(--line);background:radial-gradient(ellipse 60% 70% at 85% 30%,rgba(227,16,31,.2),transparent 70%),var(--bg)}
+.fhero .wrap{position:relative;z-index:1;padding-block:30px 46px;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:end}
+.fhero h1{font-size:clamp(46px,7.4vw,96px);line-height:.9;margin-top:12px}
+.fhero p{color:var(--mute);max-width:560px;margin-top:16px;font-size:16.5px}
+.facts{display:flex;gap:10px 28px;flex-wrap:wrap;margin-top:24px}
+.facts div{border-left:2px solid var(--red);padding-left:12px;font-size:12.5px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em}
+.facts b{display:block;font-family:var(--head);font-size:34px;line-height:1;color:var(--ink);letter-spacing:0}
+.find{position:relative;display:grid;gap:10px}
+.find label{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.fsearch{display:flex;align-items:center;gap:10px;height:58px;padding:0 18px;border-radius:16px;background:var(--panel2);border:1.5px solid var(--line);transition:border-color .2s,box-shadow .2s}
+.fsearch:focus-within{border-color:var(--red);box-shadow:0 0 0 5px rgba(227,16,31,.15)}
+.fsearch svg{width:20px;color:var(--dim);flex:none}
+.fsearch input{flex:1;background:none;border:0;outline:0;font-size:16px;min-width:0}
+.sugg{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;background:#151212;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 24px 50px rgba(0,0,0,.6)}
+.sugg button,.sugg .sbtn{display:flex;justify-content:space-between;gap:12px;width:100%;padding:12px 16px;text-align:left;font-size:14.5px;border-bottom:1px solid var(--line)}
+.sugg button:last-child{border:0}
+.sugg button:hover,.sugg button.on{background:rgba(227,16,31,.12)}
+.sugg small{color:var(--dim);white-space:nowrap}
+.mine{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;color:var(--mute)}
+.mine button{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+
+.stepl{display:flex;align-items:center;gap:12px;margin:34px 0 14px}
+.stepl b{width:30px;height:30px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-family:var(--head);font-size:18px;flex:none}
+.stepl h2{font-size:28px}
+.brands{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.brandb{padding:16px;border-radius:16px;background:var(--panel);border:1.5px solid var(--line);text-align:left;transition:all .25s var(--ease)}
+.brandb:hover{border-color:#5a4f4f;transform:translateY(-2px)}
+.brandb[aria-pressed="true"]{border-color:var(--red);background:linear-gradient(160deg,rgba(227,16,31,.18),var(--panel))}
+.brandb b{display:block;font-family:var(--head);font-size:24px;text-transform:uppercase;line-height:1}
+.brandb span{font-size:12.5px;color:var(--mute)}
+.models{display:flex;flex-wrap:wrap;gap:8px}
+.model{padding:11px 16px;border-radius:999px;border:1.5px solid var(--line);font-size:14px;font-weight:600;color:var(--mute);transition:all .2s;background:rgba(255,255,255,.02)}
+.model:hover{color:var(--ink);border-color:#fff}
+.model[aria-pressed="true"]{background:#fff;color:#111;border-color:#fff}
+.model small{opacity:.6;font-weight:500;margin-left:4px}
+
+.res{margin-top:34px;border-radius:26px;border:1px solid var(--line);background:linear-gradient(180deg,#151212,var(--bg));padding:clamp(18px,3.5vw,36px);animation:qin .5s var(--ease)}
+@keyframes qin{from{opacity:0;transform:translateY(18px)}}
+.rhead{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.rhead .pic{width:96px;height:96px;border-radius:18px;background:#fff;overflow:hidden;display:grid;place-items:center}
+.rhead .pic img{width:100%;height:100%;object-fit:contain;padding:8px}
+.rhead .pic .noimg img{width:70%}
+.rhead .tag{display:block;margin-bottom:6px}
+.rhead h2{font-size:clamp(28px,3.6vw,42px);text-transform:none;line-height:1}
+.rhead p{color:var(--mute);margin-top:6px;font-size:14.5px}
+.rhead p b{color:var(--ok)}
+.grp{margin-top:26px}
+.grp h3{font-size:22px;text-transform:uppercase;display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.grp h3 small{font-family:var(--body);font-size:13px;color:var(--dim);font-weight:600;text-transform:none}
+.fitgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.fitc{display:flex;flex-direction:column}
+.fitc .card{border-bottom-left-radius:0;border-bottom-right-radius:0;flex:1}
+.ordwa{display:flex;align-items:center;justify-content:center;gap:8px;height:42px;border-radius:0 0 var(--r) var(--r);background:#1d3b2a;color:#7ee3a8;font-weight:700;font-size:13.5px;border:1px solid #24563a;border-top:0;transition:background .2s,color .2s}
+.ordwa:hover{background:#25d366;color:#05301a}
+.ordwa svg{width:16px;height:16px}
+.ohm{margin-top:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.ohm div{padding:14px 16px;border-radius:14px;background:var(--panel);border:1px solid var(--line);font-size:13.5px;color:var(--mute)}
+.ohm b{display:block;color:var(--ink);font-size:14.5px;margin-bottom:2px}
+.jtabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.jtabs button{padding:8px 14px;border-radius:999px;border:1px solid var(--line);font-size:13px;font-weight:600;color:var(--mute)}
+.jtabs button[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+.help{margin-top:28px;display:flex;justify-content:space-between;align-items:center;gap:16px 24px;flex-wrap:wrap;padding:20px 22px;border-radius:18px;border:1.5px dashed rgba(37,211,102,.45);background:rgba(37,211,102,.05)}
+.help b{font-size:16px}
+.help p{color:var(--mute);font-size:14px;margin-top:2px}
+.empty{padding:40px 10px}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:40px}
+.how div{padding:20px;border-radius:16px;border:1px solid var(--line)}
+.how b{display:block;font-family:var(--head);font-size:22px;text-transform:uppercase;margin-bottom:4px}
+.how p{color:var(--mute);font-size:14px}
+@media (max-width:900px){.fhero .wrap{grid-template-columns:1fr;gap:24px}.ohm,.how{grid-template-columns:1fr}.rhead{grid-template-columns:auto 1fr}.rhead>.btn{grid-column:1/-1}}
+@media (max-width:560px){.rhead .pic{width:72px;height:72px}.fitgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.ordwa{font-size:12px;gap:5px}}
+</style>
+</head>
+<body data-page="fit">
+<script src="assets/site.js"></script>
+<script src="assets/fits.js"></script>
+<main id="main">
+  <section class="fhero">
+    <div class="smoke" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="wrap">
+      <div>
+        <nav class="crumbs" aria-label="Breadcrumb" style="padding-top:0"><a href="index.html">Home</a><span>/</span><span>Coil &amp; Pod Finder</span></nav>
+        <span class="tag" style="display:block;margin-top:16px">Coil &amp; Pod Finder</span>
+        <h1>What fits my <span class="script">device?</span></h1>
+        <p>Pick your device and see every coil, pod and tank that fits it, all in stock right now, plus juice that suits it. Add to your bag or order straight on WhatsApp.</p>
+        <div class="facts"><div><b id="n-dev">65</b>devices covered</div><div><b id="n-fit">190</b>coils &amp; pods matched</div><div><b>24/7</b>no waiting for the counter</div></div>
+      </div>
+      <div class="find">
+        <label for="fq">Find your device</label>
+        <div class="fsearch"><span id="fq-ic"></span><input id="fq" type="search" autocomplete="off" placeholder="e.g. XROS 4, Nord 5, Caliburn G2" aria-controls="sugg" aria-autocomplete="list"></div>
+        <div class="sugg" id="sugg" role="listbox" hidden></div>
+        <span class="mine" id="mine" hidden></span>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="stepl"><b>1</b><h2>Pick the brand</h2></div>
+    <div class="brands" id="brands"></div>
+    <div id="step2" hidden>
+      <div class="stepl"><b>2</b><h2>Pick your device</h2></div>
+      <div class="models" id="models"></div>
+    </div>
+    <div id="result"></div>
+    <div class="how" id="how">
+      <div><b>No more guessing</b><p>Every result is matched to your device from our live stock list, so you won't walk out with the wrong coil.</p></div>
+      <div><b>Order your way</b><p>Add it to your bag, or tap "Order on WhatsApp" and we'll have it ready at Atlas Junction or send it to you.</p></div>
+      <div><b>Still not sure?</b><p>Send us a photo of your device on WhatsApp. Someone from the shop will tell you exactly what fits.</p></div>
+    </div>
+  </div>
+</main>
+<script>
+$("#fq-ic").outerHTML = I.search;
+const fmt = (n) => n.toLocaleString("en-ZA").replace(/ /g, " ");
+const BRANDS = [...new Set(FITS.map((f) => f.brand))];
+let ALL = [], brand = "", fam = null, jtab = "", jflav = "";
+
+const typeOf = (p) => /tank|glass|\brta\b|\brda\b|drip/i.test(p.n) ? "Tanks & glass" : /pod|cartridge|cartdridge/i.test(p.n) ? "Pods & cartridges" : "Coils";
+const devicePic = (f) => f.devRe && ALL.find((p) => p.s === "Devices" && p.t && f.devRe.test(p.n) && !(f.notRe && f.notRe.test(p.n)));
+const ohms = (n) => parseFloat((n.match(/(\d+(?:\.\d+)?)\s*ohm/i) || [])[1]) || 9;
+
+function fitCard(p, i) {
+  const msg = `Hi Cloudside, I'd like to order: ${p.n} (${p.p ? R(p.p) : "price?"})${fam ? ` for my ${fam.name.replace(/\s*\(.*\)/, "")}` : ""}. Is it in stock?`;
+  return `<div class="fitc">${cardHtml(p, i)}<a class="ordwa" href="${wa(msg)}" target="_blank" rel="noopener">${I.wa} Order on WhatsApp</a></div>`;
+}
+
+function drawBrands() {
+  $("#brands").innerHTML = BRANDS.map((b) => {
+    const n = FITS.filter((f) => f.brand === b).length;
+    return `<button class="brandb" data-brand="${esc(b)}" aria-pressed="${b === brand}"><b>${esc(b)}</b><span>${n} device${n > 1 ? "s" : ""}</span></button>`;
+  }).join("");
+}
+function drawModels() {
+  $("#step2").hidden = !brand;
+  $("#models").innerHTML = FITS.filter((f) => f.brand === brand).map((f) =>
+    `<button class="model" data-fam="${f.id}" aria-pressed="${fam === f}">${esc(f.name)}<small>${fitsFor(f, ALL).length}</small></button>`).join("");
+}
+function drawResult(scroll) {
+  const box = $("#result");
+  $("#how").hidden = !!fam;
+  if (!fam) { box.innerHTML = ""; return; }
+  const items = fitsFor(fam, ALL).sort((a, b) => (!!b.t - !!a.t) || ohms(a.n) - ohms(b.n));
+  const groups = ["Pods & cartridges", "Coils", "Tanks & glass"].map((g) => [g, items.filter((p) => typeOf(p) === g)]).filter(([, l]) => l.length);
+  const pic = devicePic(fam);
+  if (!jtab) jtab = fam.juice === "free" ? "E Liquids" : "Nic Salts";
+  const short = fam.name.replace(/\s*\(.*\)/, "");
+  box.innerHTML = `<section class="res" id="res" aria-live="polite">
+    <div class="rhead">
+      <div class="pic">${pic ? `<img src="${esc(pic.t)}" alt="${esc(pic.n)}">` : `<div class="noimg"><img src="assets/img/logo-sm.webp" alt=""></div>`}</div>
+      <div><span class="tag">${esc(fam.brand)} · your device</span><h2>${esc(fam.name)}</h2><p><b>${items.length} part${items.length > 1 ? "s" : ""} in stock</b> that fit${pic ? ` · <a class="link" href="product.html?id=${pic.id}">see the device</a>` : ""}</p></div>
+      <button class="btn btn-line btn-sm" id="share-fit">Share this list</button>
+    </div>
+    ${groups.map(([g, l]) => `<div class="grp"><h3>${g}<small>${l.length} in stock</small></h3><div class="fitgrid">${l.map(fitCard).join("")}</div></div>`).join("")}
+    ${fam.id === "rebuild" ? "" : `<div class="ohm">
+      <div><b>Lower ohms (0.15–0.4Ω)</b>Bigger clouds and more flavour. Use with e-liquid at 3mg.</div>
+      <div><b>Middle (0.6–0.8Ω)</b>The all-rounder. Works with most nic salts and juices.</div>
+      <div><b>Higher (1.0–1.4Ω)</b>Tighter, cigarette-style draw. Best with nic salts.</div></div>`}
+    <div class="grp" id="juice"><h3>Juice for your ${esc(short)}</h3>
+      <div class="jtabs" id="jtabs">${fam.juice === "both" ? `<button data-jt="Nic Salts" aria-pressed="${jtab === "Nic Salts"}">Nic salts</button><button data-jt="E Liquids" aria-pressed="${jtab === "E Liquids"}">E-liquids</button><span style="width:10px"></span>` : ""}
+        <button data-jf="" aria-pressed="${!jflav}">All flavours</button>${Object.entries(FLAVOURS).map(([k, v]) => `<button data-jf="${k}" aria-pressed="${jflav === k}">${v.label}</button>`).join("")}</div>
+      <div class="rail" id="jrail"></div></div>
+    <div class="help"><div><b>Not sure, or can't see your device?</b><p>Send us a photo of it on WhatsApp and we'll tell you exactly what fits.</p></div>
+      <a class="btn btn-wa" target="_blank" rel="noopener" href="${wa(`Hi Cloudside, I have a ${short}. Can you help me find the right coils or pods? (I'll send a photo)`)}">${I.wa} Ask the shop</a></div>
+  </section>`;
+  drawJuice();
+  $("#share-fit").onclick = async () => {
+    const url = location.href;
+    try { if (navigator.share) await navigator.share({ title: `Coils & pods for ${short}`, url }); else { await navigator.clipboard.writeText(url); toast("Link copied. Send it to a friend with the same device."); } } catch {}
+  };
+  if (scroll) $("#res").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+function drawJuice() {
+  const re = jflav ? FLAVOURS[jflav].re : null;
+  const list = ALL.filter((p) => p.s === jtab && p.t && p.p && (!re || re.test(p.n))).sort((a, b) => b.new - a.new);
+  const seen = new Set(), mix = list.filter((p) => !seen.has(p.b) && seen.add(p.b)).concat(list).filter((p, i, a) => a.indexOf(p) === i).slice(0, 12);
+  $("#jrail").innerHTML = mix.map(cardHtml).join("") || `<p class="muted">Nothing in that flavour right now.</p>`;
+  $$("#jtabs [data-jt]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.jt === jtab));
+  $$("#jtabs [data-jf]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.jf === jflav));
+}
+function choose(f, scroll = true) {
+  fam = f; brand = f ? f.brand : brand; jtab = ""; jflav = "";
+  if (f) { store.set("cv_device", f.id); history.replaceState(null, "", "fit.html?d=" + f.id); document.title = `Coils & pods for ${f.name.replace(/\s*\(.*\)/, "")} · Cloudside Vapor`; }
+  drawBrands(); drawModels(); drawResult(scroll); drawMine();
+}
+function drawMine() {
+  const id = store.get("cv_device", ""), f = FITS.find((x) => x.id === id);
+  $("#mine").hidden = !f || f === fam;
+  if (f && f !== fam) { $("#mine").innerHTML = `Your device: <button id="mine-go">${esc(f.name.replace(/\s*\(.*\)/, ""))}</button>`; $("#mine-go").onclick = () => choose(f); }
+}
+
+// search with suggestions
+let sIdx = -1;
+function suggest() {
+  const q = $("#fq").value.trim().toLowerCase(), box = $("#sugg");
+  if (!q) { box.hidden = true; return; }
+  const words = q.split(/\s+/);
+  const hits = FITS.filter((f) => words.every((w) => (f.brand + " " + f.name).toLowerCase().includes(w))).slice(0, 7);
+  sIdx = -1;
+  box.innerHTML = hits.length ? hits.map((f, i) => `<button role="option" data-fam="${f.id}">${esc(f.name)}<small>${esc(f.brand)} · ${fitsFor(f, ALL).length} parts</small></button>`).join("")
+    : `<a class="sbtn" href="${wa("Hi Cloudside, what coils or pods fit my " + q + "?")}" target="_blank" rel="noopener">Not listed. Ask us about "${esc(q)}" on WhatsApp</a>`;
+  box.hidden = false;
+}
+$("#fq").addEventListener("input", suggest);
+$("#fq").addEventListener("keydown", (e) => {
+  const opts = $$("#sugg button"); if (!opts.length || $("#sugg").hidden) return;
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); sIdx = (sIdx + (e.key === "ArrowDown" ? 1 : -1) + opts.length) % opts.length; opts.forEach((o, i) => o.classList.toggle("on", i === sIdx)); }
+  if (e.key === "Enter") { e.preventDefault(); (opts[sIdx] || opts[0]).click(); }
+});
+document.addEventListener("click", (e) => {
+  const t = e.target.closest("[data-brand],[data-fam],[data-jt],[data-jf]");
+  if (!e.target.closest(".find")) $("#sugg").hidden = true;
+  if (!t) return;
+  if (t.dataset.brand !== undefined) { brand = t.dataset.brand; fam = null; drawBrands(); drawModels(); drawResult(); $("#step2").scrollIntoView({ behavior: "smooth", block: "center" }); }
+  else if (t.dataset.fam) { $("#sugg").hidden = true; $("#fq").value = ""; choose(FITS.find((f) => f.id === t.dataset.fam)); }
+  else if (t.dataset.jt) { jtab = t.dataset.jt; drawJuice(); }
+  else if (t.dataset.jf !== undefined) { jflav = t.dataset.jf; drawJuice(); }
+});
+
+loadProducts().then((all) => {
+  ALL = all;
+  countUp($("#n-dev"), FITS.length);
+  countUp($("#n-fit"), all.filter((p) => familiesForCoil(p).length).length);
+  const start = FITS.find((f) => f.id === new URLSearchParams(location.search).get("d"));
+  start ? choose(start, false) : (drawBrands(), drawMine());
+});
+</script>
+</body>
+</html>
