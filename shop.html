@@ -48,6 +48,12 @@
 .active button{display:inline-flex;gap:6px;align-items:center;padding:6px 8px 6px 12px;border-radius:999px;background:var(--red-soft);border:1px solid rgba(227,16,31,.4);font-size:13px}
 .active button svg{width:13px;height:13px}
 .active .clear{background:none;border:0;text-decoration:underline;color:var(--mute)}
+.snusbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;padding:14px;border-radius:16px;background:linear-gradient(120deg,#16110f,#1d1414);border:1px solid #3a1d20}
+.snusbar span{font-size:13px;color:var(--mute);margin-right:4px}
+.snusbar button{padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);font-family:var(--head);font-size:18px;font-weight:700;text-transform:uppercase;transition:all .2s}
+.snusbar button:hover{border-color:#fff}
+.snusbar button[aria-pressed="true"]{background:#fff;color:#111;border-color:#fff}
+.snusbar small{flex-basis:100%;font-size:12.5px;color:var(--mute)}
 .loadmore{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:28px;color:var(--mute);font-size:14px}
 .none{grid-column:1/-1;padding:60px 20px;text-align:center;border:1px dashed var(--line);border-radius:var(--r);display:grid;gap:10px;justify-items:center}
 .none b{font-size:18px}
@@ -81,6 +87,7 @@
       <div class="side-head"><h3>Filters</h3><button class="x" id="side-x" aria-label="Close filters"></button></div>
       <div class="fg"><h4>Category</h4><ul class="fl" id="f-cat"></ul></div>
       <div class="fg"><h4>Flavour</h4><div class="pills" id="f-flav"></div></div>
+      <div class="fg" id="g-ns" hidden><h4>Pouch strength</h4><div class="pills" id="f-ns"></div></div>
       <div class="fg" id="g-puffs"><h4>Puffs (disposables)</h4><div class="pills" id="f-puffs"></div></div>
       <div class="fg"><h4>Price</h4>
         <div class="range"><label class="sr" for="pmin">Minimum price</label><input id="pmin" type="number" inputmode="numeric" min="0" placeholder="R min"><span class="muted">to</span><label class="sr" for="pmax">Maximum price</label><input id="pmax" type="number" inputmode="numeric" min="0" placeholder="R max"></div>
@@ -102,6 +109,7 @@
           <select class="sort" id="sort"><option value="rec">Recommended</option><option value="lo">Price: low to high</option><option value="hi">Price: high to low</option><option value="az">Name: A to Z</option><option value="puffs">Most puffs</option></select>
         </div>
       </div>
+      <div class="snusbar" id="snusbar" hidden></div>
       <div class="active" id="active"></div>
       <div class="grid" id="grid"></div>
       <div class="loadmore" id="more"></div>
@@ -117,14 +125,23 @@ $("#side-x").innerHTML = I.x;
 
 const PAGE = 36;
 const SUBS = { vape: ["Disposables", "Devices", "Nic Salts", "E Liquids", "Coils, Pods & Tanks", "MTL", "Vape Accessories", "Batteries & Chargers", "Other"], hookah: ["Hookah Pipes", "Hookah Flavour", "Coal", "Heads", "Hookah Accessories"], snus: ["Snus"] };
-const MAIN = { vape: "Vape", hookah: "Hookah", snus: "Snus" };
+const MAIN = { vape: "Vape", hookah: "Hookah", snus: "Snus & pouches" };
 const SUBNAME = { "E Liquids": "E-liquids", "Nic Salts": "Nic salts", "Devices": "Pod kits & devices", "Hookah Flavour": "Shisha flavours", "Coal": "Coals" };
 const PUFFS = [["u5", "Under 5k", 0, 4999], ["5-10", "5k–10k", 5000, 10000], ["10-20", "10k–20k", 10001, 20000], ["20", "20k+", 20001, 1e9]];
+// nicotine pouch strength buckets: mg from the name, or Zyn/Velo-style words
+const NS = [["light", "Light (up to 6mg)"], ["regular", "Regular (6–12mg)"], ["strong", "Strong (12–20mg)"], ["xstrong", "Extra strong (20mg+)"], ["other", "Caffeine & CBD"]];
+const nsOf = (p) => {
+  if (p.c !== "snus") return "";
+  if (!isPouch(p)) return "other";
+  const mg = parseFloat(p.mg);
+  if (mg) return mg <= 6 ? "light" : mg <= 12 ? "regular" : mg <= 20 ? "strong" : "xstrong";
+  return /strong|intense/i.test(p.n) ? "strong" : /medium|tingling/i.test(p.n) ? "regular" : "";
+};
 const PRICES = [[0, 150, "Under R150"], [150, 300, "R150–R300"], [300, 600, "R300–R600"], [600, 0, "R600+"]];
 const puffN = (p) => { const n = parseFloat(p.puffs) || 0; return n < 100 ? n * 1000 : n; }; // "20k puffs" is stored as 20
 
 const url = new URLSearchParams(location.search);
-const st = { c: url.get("c") || "", s: url.get("s") || "", b: url.get("b") || "", q: url.get("q") || "", f: url.get("f") || "", pf: url.get("pf") || "",
+const st = { c: url.get("c") || "", s: url.get("s") || "", b: url.get("b") || "", q: url.get("q") || "", f: url.get("f") || "", pf: url.get("pf") || "", ns: url.get("ns") || "",
   min: +url.get("min") || 0, max: +url.get("max") || 0, new: url.get("new") === "1", photo: url.get("photo") === "1", sort: url.get("sort") || "rec" };
 if (st.s && !st.c) st.c = Object.keys(SUBS).find((k) => SUBS[k].includes(st.s)) || "";
 let shown = PAGE, brandAll = false, ALL = [];
@@ -135,6 +152,7 @@ function matches(p, skip = "") {
   if (skip !== "b" && st.b && p.b !== st.b) return false;
   if (skip !== "f" && st.f && !FLAVOURS[st.f]?.re.test(p.n)) return false;
   if (skip !== "pf" && st.pf) { const r = PUFFS.find((x) => x[0] === st.pf), n = puffN(p); if (!r || !n || n < r[2] || n > r[3]) return false; }
+  if (skip !== "ns" && st.ns && nsOf(p) !== st.ns) return false;
   if (st.min && (!p.p || p.p < st.min)) return false;
   if (st.max && (!p.p || p.p > st.max)) return false;
   if (st.new && !p.new) return false;
@@ -147,7 +165,7 @@ const fmt = (n) => n.toLocaleString("en-ZA").replace(/ /g, " ");
 
 function sync() {
   const u = new URLSearchParams();
-  ["c", "s", "b", "q", "f", "pf"].forEach((k) => st[k] && u.set(k, st[k]));
+  ["c", "s", "b", "q", "f", "pf", "ns"].forEach((k) => st[k] && u.set(k, st[k]));
   st.min && u.set("min", st.min); st.max && u.set("max", st.max); st.new && u.set("new", 1); st.photo && u.set("photo", 1); st.sort !== "rec" && u.set("sort", st.sort);
   history.replaceState(null, "", "shop.html" + (u.toString() ? "?" + u : ""));
 }
@@ -166,6 +184,15 @@ function render(keepPage) {
   // puffs only matters for disposables
   $("#g-puffs").hidden = !(st.s === "Disposables" || (!st.s && st.c !== "hookah" && st.c !== "snus"));
   $("#f-puffs").innerHTML = PUFFS.map(([k, l]) => `<button data-pf="${k}" aria-pressed="${st.pf === k}">${l}</button>`).join("");
+  const snus = st.c === "snus";
+  $("#g-ns").hidden = !snus;
+  if (snus) {
+    const forNs = ALL.filter((p) => matches(p, "ns"));
+    $("#f-ns").innerHTML = NS.map(([k, l]) => `<button data-ns="${k}" aria-pressed="${st.ns === k}">${l} (${forNs.filter((p) => nsOf(p) === k).length})</button>`).join("");
+    const sb = Object.entries(count(ALL.filter((p) => p.c === "snus"), (p) => p.b)).sort((a, b) => (b[0] === "ZYN SNUS") - (a[0] === "ZYN SNUS") || b[1] - a[1]);
+    $("#snusbar").innerHTML = `<span>Brands</span>` + sb.map(([b]) => `<button data-sb="${esc(b)}" aria-pressed="${st.b === b}">${esc(b.replace(/ snus$/i, ""))}</button>`).join("") + `<small>Pick your nicotine strength when you add a can to your bag: Light 3mg, Regular 6mg, Strong 10mg, or the can's own strength.</small>`;
+  }
+  $("#snusbar").hidden = !snus;
   $("#f-price").innerHTML = PRICES.map(([a, b, l]) => `<button data-pr="${a}-${b}" aria-pressed="${st.min === a && st.max === b && (a || b)}">${l}</button>`).join("");
   $("#pmin").value = st.min || ""; $("#pmax").value = st.max || "";
   $("#t-new").checked = st.new; $("#t-photo").checked = st.photo;
@@ -198,6 +225,7 @@ function render(keepPage) {
   if (st.b) chips.push(["b", st.b]);
   if (st.f) chips.push(["f", FLAVOURS[st.f].label]);
   if (st.pf) chips.push(["pf", PUFFS.find((x) => x[0] === st.pf)[1] + " puffs"]);
+  if (st.ns) chips.push(["ns", NS.find((x) => x[0] === st.ns)[1]]);
   if (st.min || st.max) chips.push(["price", st.min && st.max ? `${R(st.min)}–${R(st.max)}` : st.min ? `From ${R(st.min)}` : `Up to ${R(st.max)}`]);
   if (st.new) chips.push(["new", "New arrivals"]);
   if (st.photo) chips.push(["photo", "With photos"]);
@@ -206,19 +234,21 @@ function render(keepPage) {
 }
 
 document.addEventListener("click", (e) => {
-  const t = e.target.closest("[data-cat],[data-flav],[data-pf],[data-pr],[data-brand],[data-unset],[data-clear],#bmore,#loadmore,#ffbtn,#side-x,#side-done");
+  const t = e.target.closest("[data-cat],[data-flav],[data-pf],[data-ns],[data-sb],[data-pr],[data-brand],[data-unset],[data-clear],#bmore,#loadmore,#ffbtn,#side-x,#side-done");
   if (!t) return;
   if (t.id === "loadmore") { shown += PAGE; render(true); return; }
   if (t.id === "bmore") { brandAll = !brandAll; render(true); return; }
   if (t.id === "ffbtn") { $("#side").classList.add("on"); document.body.classList.add("lock"); return; }
   if (t.id === "side-x" || t.id === "side-done") { $("#side").classList.remove("on"); document.body.classList.remove("lock"); return; }
-  if (t.dataset.cat !== undefined) { st.c = t.dataset.cat; st.s = t.dataset.sub || ""; if (st.s !== "Disposables" && st.c !== "vape") st.pf = ""; }
+  if (t.dataset.cat !== undefined) { st.c = t.dataset.cat; st.s = t.dataset.sub || ""; if (st.c !== "snus") st.ns = ""; if (st.s !== "Disposables" && st.c !== "vape") st.pf = ""; }
   else if (t.dataset.flav) st.f = st.f === t.dataset.flav ? "" : t.dataset.flav;
   else if (t.dataset.pf) st.pf = st.pf === t.dataset.pf ? "" : t.dataset.pf;
+  else if (t.dataset.ns) st.ns = st.ns === t.dataset.ns ? "" : t.dataset.ns;
+  else if (t.dataset.sb) st.b = st.b === t.dataset.sb ? "" : t.dataset.sb;
   else if (t.dataset.pr) { const [a, b] = t.dataset.pr.split("-").map(Number); const on = st.min === a && st.max === b; st.min = on ? 0 : a; st.max = on ? 0 : b; }
   else if (t.dataset.brand !== undefined) st.b = t.dataset.brand;
   else if (t.dataset.unset) { const k = t.dataset.unset; if (k === "c") { st.c = st.s = ""; } else if (k === "price") { st.min = st.max = 0; } else if (k === "q") { st.q = ""; $("#q").value = ""; } else st[k] = typeof st[k] === "boolean" ? false : ""; }
-  else if (t.hasAttribute("data-clear")) { Object.assign(st, { c: "", s: "", b: "", q: "", f: "", pf: "", min: 0, max: 0, new: false, photo: false }); $("#q").value = ""; }
+  else if (t.hasAttribute("data-clear")) { Object.assign(st, { c: "", s: "", b: "", q: "", f: "", pf: "", ns: "", min: 0, max: 0, new: false, photo: false }); $("#q").value = ""; }
   render();
   if (innerWidth > 960) scrollTo({ top: 0, behavior: "smooth" });
 });

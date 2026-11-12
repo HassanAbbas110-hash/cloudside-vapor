@@ -83,7 +83,21 @@ function cardHtml(p, i = 0) {
     <div class="bd"><span class="br">${esc(p.b || p.s)}</span><p class="nm"><a href="${productUrl(p)}">${esc(p.n)}</a></p>
       <div class="ft">${priceHtml(p)}${p.p ? `<button class="add" data-add="${p.id}" aria-label="Add ${esc(p.n)} to bag">${I.plus}</button>` : ""}</div></div></article>`;
 }
-const slim = (p) => ({ id: p.id, n: p.n, p: p.p, t: p.t, u: p.u, b: p.b, s: p.s, var: p.var });
+const slim = (p) => ({ id: p.id, n: p.n, p: p.p, t: p.t, u: p.u, b: p.b, s: p.s, c: p.c, mg: p.mg, var: p.var });
+
+/* ---------- nicotine pouches: pick a strength before adding ---------- */
+const POUCH_TIERS = [["3mg", "Light"], ["6mg", "Regular"], ["10mg", "Strong"]];
+const isPouch = (p) => p.c === "snus" && !/caffeine|cbd/i.test(p.n);
+// what the can itself is: a number from the name, or Zyn/Velo-style words
+const pouchOwn = (p) => p.mg ? p.mg + "mg" : ((p.n.match(/\b(mini rich medium|mini rich strong|mini medium|mini strong|medium|strong|intense|tingling)\b/i) || [])[1] || "");
+function pouchOpts(p) {
+  const own = pouchOwn(p), opts = [];
+  if (own) opts.push({ v: own, label: "This can", stock: true });
+  POUCH_TIERS.forEach(([v, label]) => { if (v.toLowerCase() !== own.toLowerCase()) opts.push({ v, label, stock: false }); });
+  return opts;
+}
+const lineKey = (l) => l.id + "|" + (l.opt || "");
+const optText = (l) => l.opt ? `Strength: ${l.opt}${l.req ? " (on request)" : ""}` : "";
 
 /* ---------- cart + favourites ---------- */
 let cart = store.get("cv_cart", []);
@@ -106,11 +120,11 @@ function flyToBag(src) {
     { transform: `translate(${dx}px,${dy}px) scale(.08) rotate(-25deg)`, opacity: .4 }
   ], { duration: 750, easing: "cubic-bezier(.5,0,.3,1)" }).onfinish = () => g.remove();
 }
-function addToCart(p, q = 1) {
-  const line = cart.find((l) => l.id === p.id);
-  line ? (line.q += q) : cart.push({ ...slim(p), q });
+function addToCart(p, q = 1, opt = "", req = false) {
+  const key = p.id + "|" + opt, line = cart.find((l) => lineKey(l) === key);
+  line ? (line.q += q) : cart.push({ ...slim(p), q, opt, req });
   saveCart();
-  toast(`Added to your bag: ${p.n}`, "View bag", () => openDrawer("cart"));
+  toast(`Added to your bag: ${p.n}${opt ? " · " + opt : ""}`, "View bag", () => openDrawer("cart"));
   const b = $("#bag-btn"); b?.classList.remove("bump"); void b?.offsetWidth; b?.classList.add("bump");
 }
 function toggleFav(p) {
@@ -137,9 +151,9 @@ function closeDrawer() { $("#drawer").classList.remove("on"); $("#scrim").classL
 function lineHtml(l, fav) {
   const th = l.t ? `<img src="${esc(l.t)}" alt="" loading="lazy">` : `<div class="noimg"><img src="assets/img/logo-sm.webp" alt=""></div>`;
   return `<div class="li"><a class="th" href="product.html?id=${l.id}">${th}</a>
-    <div><b><a href="product.html?id=${l.id}">${esc(l.n)}</a></b><span class="sub">${l.p ? R(l.p) + (fav ? "" : " each") : "Ask for price"}</span>
+    <div><b><a href="product.html?id=${l.id}">${esc(l.n)}</a></b>${!fav && l.opt ? `<span class="optl${l.req ? " req" : ""}">${esc(optText(l))}</span>` : ""}<span class="sub">${l.p ? R(l.p) + (fav ? "" : " each") : "Ask for price"}</span>
     ${fav ? `<div><button class="btn btn-sm btn-white" data-add="${l.id}" style="margin-top:8px">Add to bag</button><button class="rm" data-unfav="${l.id}">Remove</button></div>`
-      : `<div><span class="qty"><button data-dec="${l.id}" aria-label="One less">−</button><span>${l.q}</span><button data-inc="${l.id}" aria-label="One more">+</button></span><button class="rm" data-rm="${l.id}">Remove</button></div>`}</div>
+      : `<div><span class="qty"><button data-dec="${esc(lineKey(l))}" aria-label="One less">−</button><span>${l.q}</span><button data-inc="${esc(lineKey(l))}" aria-label="One more">+</button></span><button class="rm" data-rm="${esc(lineKey(l))}">Remove</button></div>`}</div>
     ${fav ? "" : `<span class="lt">${R(l.p * l.q)}</span>`}</div>`;
 }
 function renderDrawer() {
@@ -166,8 +180,9 @@ function sendOrder() {
   if (!name.value.trim()) { name.classList.add("bad"); name.focus(); toast("Add your name so we know whose order it is"); return; }
   if (fulfil === "deliver" && !addr.value.trim()) { addr.classList.add("bad"); addr.focus(); toast("Add a delivery address (suburb and city is fine)"); return; }
   const total = cart.reduce((s, l) => s + l.p * l.q, 0);
-  const lines = cart.map((l) => `• ${l.q} x ${l.n} (${R(l.p * l.q)})`).join("\n");
-  const msg = `Hi Cloudside, I'd like to order:\n\n${lines}\n\nTotal: ${R(total)}\n${fulfil === "deliver" ? `Courier to: ${addr.value.trim()}` : "I'll collect at Atlas Junction"}\nName: ${name.value.trim()}${$("#d-note").value.trim() ? "\nNote: " + $("#d-note").value.trim() : ""}`;
+  const lines = cart.map((l) => `• ${l.q} x ${l.n}${l.opt ? ` [${optText(l)}]` : ""} (${R(l.p * l.q)})`).join("\n");
+  const asks = cart.some((l) => l.req) ? "\n\nPlease confirm the strengths marked \"on request\"." : "";
+  const msg = `Hi Cloudside, I'd like to order:\n\n${lines}\n\nTotal: ${R(total)}\n${fulfil === "deliver" ? `Courier to: ${addr.value.trim()}` : "I'll collect at Atlas Junction"}\nName: ${name.value.trim()}${$("#d-note").value.trim() ? "\nNote: " + $("#d-note").value.trim() : ""}${asks}`;
   store.set("cv_name", name.value.trim());
   window.open(wa(msg), "_blank", "noopener");
 }
@@ -236,6 +251,12 @@ function chromeBottom() {
       <button class="btn btn-wa pickup" id="d-send">${I.wa} Send order on WhatsApp</button>
       <p class="fine pickup">We check stock and confirm delivery costs and payment with you on WhatsApp before anything is charged. ID required on collection and delivery.</p>
     </div></div>
+  <div class="pick" id="pick" role="dialog" aria-modal="true" aria-labelledby="pick-h" hidden><div class="pick-in">
+    <button class="x" data-pclose aria-label="Close">${I.x}</button>
+    <span class="tag">Nicotine pouches</span><h3 id="pick-h">Choose your strength</h3><p class="pick-n" id="pick-n"></p>
+    <div class="pick-opts" id="pick-opts" role="radiogroup" aria-label="Strength"></div>
+    <p class="pick-note" id="pick-note">Pick a strength to continue.</p>
+    <button class="btn btn-red" id="pick-go" disabled>${I.bag} Add to bag</button></div></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <div class="gate" id="gate" hidden role="dialog" aria-modal="true" aria-labelledby="gate-h"><div class="gate-in" id="gate-in"></div></div>`);
 
@@ -272,22 +293,24 @@ document.addEventListener("click", async (e) => {
     e.preventDefault();
     const id = +t.dataset.add, p = byId.get(id) || favs.find((f) => f.id === id) || (await loadProducts(), byId.get(id));
     if (!p) return;
-    const qtyEl = t.dataset.qty ? $(t.dataset.qty) : null;
-    flyToBag((t.closest(".card,.pd,.li,.res") || document).querySelector(".ph > img, .pic > img, .th img"));
-    addToCart(p, qtyEl ? Math.max(1, +qtyEl.value || 1) : 1);
+    const qtyEl = t.dataset.qty ? $(t.dataset.qty) : null, q = qtyEl ? Math.max(1, +qtyEl.value || 1) : 1;
+    const img = (t.closest(".card,.pd,.li,.res,.fitc") || document).querySelector(".ph > img, .pic > img, .th img");
+    if (isPouch(p)) { openPick(p, q, img); return; }
+    flyToBag(img);
+    addToCart(p, q);
     if (t.classList.contains("add")) { t.classList.add("ok"); t.innerHTML = I.check; setTimeout(() => { t.classList.remove("ok"); t.innerHTML = I.plus; }, 1200); }
   } else if (t.dataset.fav) { e.preventDefault(); const id = +t.dataset.fav; toggleFav(byId.get(id) || favs.find((f) => f.id === id)); }
   else if (t.dataset.unfav) toggleFav(favs.find((f) => f.id === +t.dataset.unfav));
-  else if (t.dataset.inc) { cart.find((l) => l.id === +t.dataset.inc).q++; saveCart(); }
-  else if (t.dataset.dec) { const l = cart.find((l) => l.id === +t.dataset.dec); if (--l.q <= 0) cart = cart.filter((x) => x !== l); saveCart(); }
-  else if (t.dataset.rm) { cart = cart.filter((l) => l.id !== +t.dataset.rm); saveCart(); }
+  else if (t.dataset.inc) { cart.find((l) => lineKey(l) === t.dataset.inc).q++; saveCart(); }
+  else if (t.dataset.dec) { const l = cart.find((l) => lineKey(l) === t.dataset.dec); if (--l.q <= 0) cart = cart.filter((x) => x !== l); saveCart(); }
+  else if (t.dataset.rm) { cart = cart.filter((l) => lineKey(l) !== t.dataset.rm); saveCart(); }
   else if (t.id === "bag-btn") openDrawer("cart");
   else if (t.id === "fav-btn") openDrawer("favs");
   else if (t.id === "burger") $("#mnav").classList.add("on");
   else if (t.id === "mnav-x") $("#mnav").classList.remove("on");
   else if (t.id === "d-send") sendOrder();
   else if (t.id === "d-copy") {
-    const txt = cart.map((l) => `${l.q} x ${l.n}`).join("\n");
+    const txt = cart.map((l) => `${l.q} x ${l.n}${l.opt ? " (" + l.opt + ")" : ""}`).join("\n");
     try { await navigator.clipboard.writeText(txt); toast("Your list is copied. Paste it into 7Waves."); } catch { toast("Couldn't copy. Long-press the items to copy them instead."); }
   }
   else if (t.dataset.s) rate(t);
@@ -295,7 +318,28 @@ document.addEventListener("click", async (e) => {
   else if (t.id === "scrim" || t.hasAttribute("data-close")) closeDrawer();
 });
 document.addEventListener("input", (e) => e.target.classList?.remove("bad"));
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeDrawer(); $("#mnav")?.classList.remove("on"); } });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeDrawer(); closePick(); $("#mnav")?.classList.remove("on"); } });
+
+let pickState = null;
+function openPick(p, q, img) {
+  pickState = { p, q, img, opt: null };
+  $("#pick-n").textContent = p.n + (q > 1 ? ` · ${q} cans` : "");
+  $("#pick-opts").innerHTML = pouchOpts(p).map((o, i) => `<button class="popt" role="radio" aria-checked="false" data-pi="${i}"><b>${esc(o.v)}</b><span>${esc(o.label)}</span><em class="${o.stock ? "in" : "rq"}">${o.stock ? "In stock" : "On request"}</em></button>`).join("");
+  $("#pick-go").disabled = true; $("#pick-note").textContent = "Pick a strength to continue.";
+  $("#pick").hidden = false; document.body.classList.add("lock"); $("#pick-opts .popt")?.focus();
+}
+function closePick() { if ($("#pick") && !$("#pick").hidden) { $("#pick").hidden = true; if (!$("#drawer").classList.contains("on")) document.body.classList.remove("lock"); } }
+document.addEventListener("click", (e) => {
+  const o = e.target.closest("#pick .popt");
+  if (o && pickState) {
+    pickState.opt = pouchOpts(pickState.p)[+o.dataset.pi];
+    $$("#pick .popt").forEach((b) => b.setAttribute("aria-checked", b === o));
+    $("#pick-go").disabled = false;
+    $("#pick-note").textContent = pickState.opt.stock ? "This is the strength of the can in stock." : "Not this can's strength. We'll confirm we have it on WhatsApp before you pay.";
+  } else if (e.target.closest("#pick-go") && pickState?.opt) {
+    const { p, q, img, opt } = pickState; closePick(); flyToBag(img); addToCart(p, q, opt.v, !opt.stock);
+  } else if (e.target.closest("[data-pclose]") || e.target.id === "pick") closePick();
+});
 
 /* ---------- review card, socials, marquee (shared blocks) ---------- */
 function communityHtml() {
